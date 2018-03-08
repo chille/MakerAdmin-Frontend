@@ -1,4 +1,5 @@
-var webpack = require('webpack');
+const webpack = require('webpack');
+const path = require('path');
 
 // Get git info from command line
 var commitHash = require("child_process")
@@ -14,31 +15,45 @@ var options = {
 var buildDate = new Intl.DateTimeFormat('sv-SE', options).format(new Date());
 
 module.exports = {
-	context: __dirname + "/src",
-	entry: "./app.jsx",
+	context: __dirname + '/src',
+	entry: './index.jsx',
 
-	// Compile into a js.app
+	// Compile into a bundle.js
 	output:
 	{
-		filename: "app.js",
-		path: __dirname + "/dist/js",
+		path: path.resolve(__dirname, 'dist/js'),
+		publicPath: '/js/',
+		filename: "bundle.js"
+	},
+
+	// Development server on http://localhost:8100/
+	devServer: {
+//		inline: true,
+		contentBase: path.resolve(__dirname, 'dist'),
+		port: 8100,
+		historyApiFallback: {
+			index: "index.html"
+		}
 	},
 
 	// Include *.js and *.jsx files
 	resolve: {
-		extensions: ["", ".js", ".jsx"]
+		extensions: [".js", ".jsx"]
 	},
 
 	// Preprocess *.jsx files
 	module: {
-		loaders:
+		rules:
 		[
 			{
 				test: /\.jsx?$/,
 				exclude: /node_modules/,
-				loader: "babel-loader",
-				query: {
-					presets: ["es2015", "react"]
+				use:
+				{
+					loader: "babel-loader",
+					options: {
+						presets: ["@babel/preset-env", "@babel/preset-react"]
+					}
 				}
 			},
 		],
