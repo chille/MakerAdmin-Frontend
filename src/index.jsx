@@ -8,26 +8,42 @@ require('uikit/dist/js/components/autocomplete')
 require('uikit/dist/js/components/notify')
 require('uikit/dist/js/components/upload')
 
-// React stuff
+// React
 import React from 'react';
 import ReactDOM from 'react-dom';
+
+// React router
 import {
 	Router,
-	browserHistory,
+	Switch,
+	Route
 } from 'react-router'
-import {
-	Nav,
-	SideNav,
-	SideNav2,
-	Breadcrumb,
-} from './nav'
+import { Link } from 'react-router-dom'
+import createBrowserHistory from 'history/createBrowserHistory'
+const history = createBrowserHistory()
+
 import Backbone from './Backbone/FullExtend'
 
 // Login / OAuth
 import auth from './auth'
 import Login from './Pages/Login/Login'
 
-var nav = new Backbone.Model({
+// Menu
+import NavBar from './Components/NavBar'
+import NavSide from './Components/NavSide'
+import Breadcrumb from './Components/Breadcrumb'
+
+// New
+import ResetPassword from './Pages/Login/ResetPassword'
+import Dashboard from './Pages/Dashboard'
+import Global from './Pages/Settings/Global'
+import Automation from './Pages/Settings/Automation'
+import AccessTokens from './Pages/Login/AccessTokens'
+import About from './Pages/About'
+
+var accountingPeriod = 2016;
+
+var nav = {
 	brand: "MakerAdmin 1.0",
 	navItems:
 	[
@@ -107,37 +123,43 @@ var nav = new Backbone.Model({
 		},
 		{
 			text: "Ekonomi",
-			target: "/economy/2016",
+			target: "/economy",
 			icon: "money",
 			children:
 			[
 				{
 					text: "Översikt",
-					target: "/economy/2016/overview",
+					target: "/economy/" + accountingPeriod + "/overview",
+					match: "/economy/:period/overview",
 				},
 				{
 					text: "Huvudbok",
-					target: "/economy/2016/masterledger",
+					target: "/economy/" + accountingPeriod + "/masterledger",
+					match: "/economy/:period/masterledger",
 				},
 				{
 					text: "Verifikationer",
-					target: "/economy/2016/instruction",
+					target: "/economy/" + accountingPeriod + "/instruction",
+					match: "/economy/:period/instruction",
 					children:
 					[
 						{
 							text: "",
-							target: "/economy/2016/instruction/:id",
+							target: "/economy/" + accountingPeriod + "/instruction/:id",
+							match: "/economy/:period/instruction/:id",
 						},
 					],
 				},
 				{
 					text: "Fakturor",
-					target: "/economy/2016/invoice",
+					target: "/economy/" + accountingPeriod + "/invoice",
+					match: "/economy/:period/invoice",
 					children:
 					[
 						{
 							text: "",
-							target: "/economy/2016/invoice/:id",
+							target: "/economy/" + accountingPeriod + "/invoice/:id",
+							match: "/economy/:period/invoice/:id",
 						},
 					],
 				},
@@ -148,11 +170,13 @@ var nav = new Backbone.Model({
 				},
 				{
 					text: "Balansrapport",
-					target: "/economy/2016/valuationsheet",
+					target: "/economy/" + accountingPeriod + "/valuationsheet",
+					match: "/economy/:period/valuationsheet",
 				},
 				{
 					text: "Resultatrapport",
-					target: "/economy/2016/resultreport",
+					target: "/economy/" + accountingPeriod + "/resultreport",
+					match: "/economy/:period/resultreport",
 				},
 				{
 					type: "heading",
@@ -161,7 +185,8 @@ var nav = new Backbone.Model({
 				},
 				{
 					text: "Kostnadsställen",
-					target: "/economy/2016/costcenter",
+					target: "/economy/" + accountingPeriod + "/costcenter",
+					match: "/economy/:period/costcenter",
 				},
 			],
 		},
@@ -271,46 +296,73 @@ var nav = new Backbone.Model({
 			icon: "sign-out",
 		},
 	]
-});
+};
 
-var App = React.createClass({
-	getInitialState()
+import ModuleEconomy from './Economy/Index'
+import ModuleStatistics from './Statistics/Index'
+import ModuleKeys from './Keys/Index'
+import ModuleAuto from './Auto/Index'
+import ModuleMembership from './Membership/Index'
+import Logout from './Pages/Login/Logout'
+import Error404 from './Pages/404'
+
+class App extends React.Component
+{
+	constructor()
 	{
-		return {
+		super();
+
+		this.state = {
 			isLoggedIn: auth.isLoggedIn()
-		}
-	},
+		};
+	}
 
 	updateAuth(isLoggedIn)
 	{
 		this.setState({
 			isLoggedIn
 		});
-	},
+	}
 
 	componentWillMount()
 	{
-		auth.onChange = this.updateAuth;
-	},
+		auth.onChange = this.updateAuth.bind(this);
+	}
 
-	render: function()
+	render()
 	{
 		if(this.state.isLoggedIn)
 		{
 			return (
 				<div>
-					<Nav model={nav} />
-					<SideNav model={nav} />
-
+					<NavBar />
 					<div className="uk-container uk-container-center uk-margin-top">
 						<div className="uk-grid">
 							<div className="uk-width-medium-1-4">
-								<SideNav2 model={nav} />
+								<NavSide navItems={nav.navItems} />
 							</div>
 
 							<div className="uk-width-medium-3-4">
 								<Breadcrumb routes={this.props.routes}/>
+
 								{this.props.children}
+								<Switch>
+									<Route exact path="/" component={Dashboard} />
+									<Route exact path="/logout" component={Logout} />
+									<Route exact path="/resetpassword" component={ResetPassword} />
+									<Route exact path="/settings/global" component={Global} />
+									<Route exact path="/settings/automation" component={Automation} />
+									<Route exact path="/settings/tokens" component={AccessTokens} />
+									<Route exact path="/settings/about" component={About} />
+
+									<ModuleMembership />
+									<ModuleEconomy />
+									<ModuleStatistics />
+									<ModuleKeys />
+									<ModuleAuto />
+
+									<Route component={Error404} />
+								</Switch>
 							</div>
 						</div>
 					</div>
@@ -323,70 +375,14 @@ var App = React.createClass({
 				<Login />
 			);
 		}
-
 	}
-});
-App.title = "Internal"
-
-const rootRoute = {
-	childRoutes: [
-		{
-			path: "resetpassword",
-			component: require("./Pages/Login/ResetPassword"),
-		},
-		{
-			path: "/",
-			component: App,
-			indexRoute: {
-				component: require("./Pages/Dashboard"),
-			},
-			childRoutes: [
-				{
-					path: "logout",
-					component: require("./Pages/Login/Logout"),
-				},
-				require("./Economy/Routes"),
-				require("./Membership/Routes"),
-				require("./Sales/Routes"),
-				require("./Messages/Routes"),
-				require("./Keys/Routes"),
-				require("./Statistics/Routes"),
-				require("./Export/Routes"),
-				require("./Tictail/Routes"),
-				require("./Auto/Routes"),
-				{
-					path: "settings",
-					indexRoute: {
-						component: require("./Pages/Settings/Global"),
-					},
-					childRoutes: [
-						{
-							path: "global",
-							component: require("./Pages/Settings/Global"),
-						},
-						{
-							path: "automation",
-							component: require("./Pages/Settings/Automation"),
-						},
-						{
-							path: "tokens",
-							component: require("./Pages/Login/AccessTokens"),
-						},
-						{
-							path: "about",
-							component: require("./Pages/About"),
-						},
-					]
-				},
-				{
-					path: "*",
-					component: require("./Pages/404"),
-				},
-			]
-		}
-	]
 }
 
+//TODO1
+//App.title = "MakerAdmin"
+
 ReactDOM.render((
-	<Router history={browserHistory} routes={rootRoute} />
+	<Router history={history}>
+		<Route path="/" component={App}/>
+	</Router>
 ), document.getElementById("main"));
