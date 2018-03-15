@@ -1,25 +1,24 @@
 import React from 'react'
 
-import { Link } from 'react-router'
+import { Link } from 'react-router-dom'
 import BackboneTable from '../../../BackboneTable'
 import DateTimeField from '../../../Components/DateTime'
 
-module.exports = React.createClass({
-	mixins: [Backbone.React.Component.mixin, BackboneTable],
-
-	getInitialState: function()
+module.exports = class Recipients extends BackboneTable
+{
+	constructor(props)
 	{
-		return {
-			columns: 4,
-		};
-	},
+		super(props);
 
-	componentWillMount: function()
+		this.state.columns = 4;
+	}
+
+	componentWillMount()
 	{
 		this.fetch();
-	},
+	}
 
-	renderHeader: function()
+	renderHeader()
 	{
 		return [
 			{
@@ -38,38 +37,38 @@ module.exports = React.createClass({
 				title: "",
 			},
 		];
-	},
+	}
 
-	renderRow: function(row, i)
+	renderRow(row, i)
 	{
 		return [
 			(
 				<tr key={i}>
-					<td><Link to={"/membership/members/" + row.member_id + "/messages"}>Visa</Link></td>
-					<td>{row.recipient}</td>
+					<td><Link to={"/membership/members/" + row.attributes.member_id + "/messages"}>Visa</Link></td>
+					<td>{row.attributes.recipient}</td>
 					<td>
 						{(() => {
-							switch (row.status) {
-								case "queued": return <span>Köad <DateTimeField date={row.created_at} /></span>;
+							switch (row.attributes.status) {
+								case "queued": return <span>Köad <DateTimeField date={row.attributes.created_at} /></span>;
 								case "failed": return "Sändning misslyckades";
-								case "sent":   return <span>Skickad <DateTimeField date={row.date_sent} /></span>;
+								case "sent":   return <span>Skickad <DateTimeField date={row.attributes.date_sent} /></span>;
 								default:       return "Okänt";
 							}
 						})()}
 					</td>
 					<td className="uk-text-right">
-						<a data-uk-toggle={"{target: \"#recipient-" + row.recipient_id + "\"}"}>Visa meddelande <i className="uk-icon-angle-down" /></a>
+						<a data-uk-toggle={"{target: \"#recipient-" + row.attributes.recipient_id + "\"}"}>Visa meddelande <i className="uk-icon-angle-down" /></a>
 					</td>
 				</tr>
 			),
 			(
-				<tr id={"recipient-" + row.recipient_id} className="uk-hidden">
+				<tr id={"recipient-" + row.attributes.recipient_id} className="uk-hidden">
 					<td colSpan={4}>
-						{row.message_type != "sms" ? <h3>{row.subject}</h3> : ''}
-						<p>{row.body}</p>
+						{row.attributes.message_type != "sms" ? <h3>{row.attributes.subject}</h3> : ''}
+						<p>{row.attributes.body}</p>
 					</td>
 				</tr>
 			)
 		];
-	},
-});
+	}
+}

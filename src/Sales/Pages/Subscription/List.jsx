@@ -5,8 +5,9 @@ import SubscriptionCollection from '../../Collections/Subscription'
 
 import Subscriptions from '../../Components/Tables/Subscriptions'
 
-module.exports =  React.createClass({
-	render: function()
+module.exports =  class Meep extends React.Component
+{
+	render()
 	{
 		return (
 			<div>
@@ -15,6 +16,6 @@ module.exports =  React.createClass({
 				<Subscriptions type={SubscriptionCollection} />
 			</div>
 		);
-	},
-});
+	}
+}
 //SalesSubscriptionsHandler.title = "Visa prenumerationer";

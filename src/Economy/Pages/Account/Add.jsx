@@ -5,18 +5,21 @@ import AccountModel from '../../Models/Account'
 
 import EconomyAccount from '../../Components/Forms/Account'
 
-module.exports = React.createClass({
-	getInitialState: function()
+module.exports = class Meep extends React.Component
+{
+	constructor(props)
 	{
+		super(props);
+
 		var account = new AccountModel({
-			period: this.props.params.period,
+			period: this.props.match.params.period,
 		});
-		return {
+		this.state = {
 			model: account,
 		};
-	},
+	}
 
-	render: function()
+	render()
 	{
 		return (
 			<div>
@@ -24,5 +27,5 @@ module.exports = React.createClass({
 				<EconomyAccount model={this.state.model} />
 			</div>
 		);
-	},
-});
+	}
+}

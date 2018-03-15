@@ -1,23 +1,21 @@
 import React from 'react'
-import BackboneReact from 'backbone-react-component'
 import BackboneTable from '../../../BackboneTable'
 
-module.exports = React.createClass({
-	mixins: [Backbone.React.Component.mixin, BackboneTable],
-
-	getInitialState: function()
+module.exports = class InvoiceList extends BackboneTable
+{
+	constructor(props)
 	{
-		return {
-			columns: 6,
-		};
-	},
+		super(props);
 
-	componentWillMount: function()
+		this.state.columns = 6;
+	}
+
+	componentWillMount()
 	{
 		this.fetch();
-	},
+	}
 
-	renderHeader: function()
+	renderHeader()
 	{
 		return [
 			{
@@ -46,24 +44,24 @@ module.exports = React.createClass({
 				sort: "status",
 			},
 		];
-	},
+	}
 
-	renderRow: function(row, i)
+	renderRow(row, i)
 	{
-		if(row.status == "unpaid")
+		if(row.attributes.status == "unpaid")
 		{
-			row.status = "Obetald";
+			row.attributes.status = "Obetald";
 		}
 
 		return (
 			<tr key={i}>
-				<td><Link to={"/economy/invoice/" + row.invoice_number}>{row.invoice_number}</Link></td>
-				<td><DateField date={row.date_expiry} /></td>
-				<td>{row.title}</td>
-				<td>{row.your_reference}</td>
-				<td className="uk-text-right"><Currency value={row._total} currency={row.currency} /></td>
-				<td>{row.status}</td>
+				<td><Link to={"/economy/invoice/" + row.attributes.invoice_number}>{row.attributes.invoice_number}</Link></td>
+				<td><DateField date={row.attributes.date_expiry} /></td>
+				<td>{row.attributes.title}</td>
+				<td>{row.attributes.your_reference}</td>
+				<td className="uk-text-right"><Currency value={row.attributes._total} currency={row.attributes.currency} /></td>
+				<td>{row.attributes.status}</td>
 			</tr>
 		);
-	},
-});
+	}
+}

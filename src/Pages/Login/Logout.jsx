@@ -1,13 +1,17 @@
 import React from 'react';
-
 import auth from '../../auth'
+import { withRouter } from 'react-router'
 
-module.exports = React.createClass({
-	componentDidMount() {
+module.exports = withRouter(class Logout extends React.Component
+{
+	componentDidMount()
+	{
 		auth.logout()
-	},
-
-	render() {
-		return <p>You are now logged out</p>
+		this.props.history.push("/");
 	}
-})
+
+	render()
+	{
+		return <p>Logging out...</p>
+	}
+});

@@ -5,15 +5,18 @@ import TemplateForm from '../../Components/Forms/Template'
 // Backbone
 import TemplateModel from '../../Models/Template'
 
-module.exports = withRouter(React.createClass({
-	getInitialState: function()
+module.exports = withRouter(class Meep extends React.Component
+{
+	constructor()
 	{
-		return {
-			model: new TemplateModel(),
-		};
-	},
+		super();
 
-	render: function()
+		this.state = {
+			model: new TemplateModel()
+		};
+	}
+
+	render()
 	{
 		return (
 			<div>
@@ -21,5 +24,5 @@ module.exports = withRouter(React.createClass({
 				<TemplateForm model={this.state.model} route={this.props.route} />
 			</div>
 		);
-	},
-}));
+	}
+});

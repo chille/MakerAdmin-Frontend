@@ -1,38 +1,37 @@
 import React from 'react'
 
-import { Link } from 'react-router'
+import { Link } from 'react-router-dom'
 import BackboneTable from '../../../BackboneTable'
 import Currency from '../../../Components/Currency'
 //import DateField from '../../../Components/Date'
 import TableDropdownMenu from '../../../TableDropdownMenu'
 
 
-module.exports = React.createClass({
-	mixins: [Backbone.React.Component.mixin, BackboneTable],
-
-	getInitialState: function()
+module.exports = class Products extends BackboneTable
+{
+	constructor(props)
 	{
-		return {
-			columns: 7,
-		};
-	},
+		super(props);
 
-	componentWillMount: function()
+		this.state.columns = 7;
+	}
+
+	componentWillMount()
 	{
 		this.fetch();
-	},
+	}
 
-	removeTextMessage: function(entity)
+	removeTextMessage(entity)
 	{
 		return "Are you sure you want to remove product \"" + entity.title + "\"?";
-	},
+	}
 
-	removeErrorMessage: function()
+	removeErrorMessage()
 	{
 		UIkit.notify("Error deleting product", {timeout: 0, status: "danger"});
-	},
+	}
 
-	renderHeader: function()
+	renderHeader()
 	{
 		return [
 			{
@@ -59,24 +58,24 @@ module.exports = React.createClass({
 				title: "",
 			},
 		];
-	},
+	}
 
-	renderRow: function(row, i)
+	renderRow(row, i)
 	{
 		return (
 			<tr key={i}>
-				<td><Link to={"/sales/product/" + row.product_id}>{row.title}</Link></td>
-				<td>{row.expiry_date}</td>
-				<td>{row.auto_extend}</td>
-				<td>{row.interval}</td>
-				<td><Currency value={row.price} /></td>
+				<td><Link to={"/sales/product/" + row.attributes.product_id}>{row.attributes.title}</Link></td>
+				<td>{row.attributes.expiry_date}</td>
+				<td>{row.attributes.auto_extend}</td>
+				<td>{row.attributes.interval}</td>
+				<td><Currency value={row.attributes.price} /></td>
 				<td>
 					<TableDropdownMenu>
-						<Link to={"/sales/product/" + row.product_id}><i className="uk-icon-cog" /> Redigera produkt</Link>
+						<Link to={"/sales/product/" + row.attributes.product_id}><i className="uk-icon-cog" /> Redigera produkt</Link>
 						{this.removeButton(i, "Ta bort produkt")}
 					</TableDropdownMenu>
 				</td>
 			</tr>
 		);
-	},
-});
+	}
+}

@@ -5,9 +5,9 @@ import TransactionCollection from '../../Collections/Transaction'
 
 import TransactionsUser from '../../Components/Tables/TransactionsUser'
 
-module.exports = React.createClass(
+module.exports = class List extends React.Component
 {
-	render: function()
+	render()
 	{
 		return (
 			<TransactionsUser
@@ -15,12 +15,12 @@ module.exports = React.createClass(
 				dataSource={{
 					url: "/related",
 					params: {
-						param: "/membership/member/" + this.props.params.member_id,
+						param: "/membership/member/" + this.props.match.params.member_id,
 						matchUrl: "/economy/transaction/(.*)",
 						from: "economy/transactions",
 					}
 				}}
 			/>
 		);
-	},
-});
+	}
+}

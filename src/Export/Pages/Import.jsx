@@ -1,7 +1,8 @@
 import React from 'react'
 
-module.exports = React.createClass({
-	render: function()
+module.exports = class Import extends React.Component
+{
+	render()
 	{
 		return (
 			<div>
@@ -9,5 +10,5 @@ module.exports = React.createClass({
 				<p>Blablabla...</p>
 			</div>
 		);
-	},
-});
+	}
+}

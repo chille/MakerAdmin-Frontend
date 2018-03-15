@@ -1,26 +1,24 @@
 import React from 'react'
-import BackboneReact from 'backbone-react-component'
 
-import { Link } from 'react-router'
+import { Link } from 'react-router-dom'
 import BackboneTable from '../../../BackboneTable'
 import Currency from '../../../Components/Currency'
 
-module.exports = React.createClass({
-	mixins: [Backbone.React.Component.mixin, BackboneTable],
-
-	getInitialState: function()
+module.exports = class History extends BackboneTable
+{
+	constructor(props)
 	{
-		return {
-			columns: 7,
-		};
-	},
+		super(props);
 
-	componentWillMount: function()
+		this.state.columns = 7;
+	}
+
+	componentWillMount()
 	{
 		this.fetch();
 	},
 
-	renderHeader: function ()
+	renderHeader()
 	{
 		return [
 			{
@@ -48,19 +46,19 @@ module.exports = React.createClass({
 				sort: "amount",
 			},
 		];
-	},
+	}
 
-	renderRow: function (row, i)
+	renderRow(row, i)
 	{
 		return (
 			<tr key={i}>
-				<td>{row.accounting_date}</td>
-				<td><Link to={"/entity/" + row.entity_id}>{row.extid}</Link></td>
-				<td><Link to={"/membership/members/" + row.member_number}>{row.member_firstname} {row.member_lastname}</Link></td>
-				<td>{row.instruction_title}</td>
-				<td><Link to={"/sales/products/" + row.product_id}>{row.product_title}</Link></td>
-				<td className="uk-text-right"><Currency value={-1 * row.amount} /></td>
+				<td>{row.attributes.accounting_date}</td>
+				<td><Link to={"/entity/" + row.attributes.entity_id}>{row.attributes.extid}</Link></td>
+				<td><Link to={"/membership/members/" + row.attributes.member_number}>{row.attributes.member_firstname} {row.attributes.member_lastname}</Link></td>
+				<td>{row.attributes.instruction_title}</td>
+				<td><Link to={"/sales/products/" + row.attributes.product_id}>{row.attributes.product_title}</Link></td>
+				<td className="uk-text-right"><Currency value={-1 * row.attributes.amount} /></td>
 			</tr>
 		);
-	},
-});
+	}
+}

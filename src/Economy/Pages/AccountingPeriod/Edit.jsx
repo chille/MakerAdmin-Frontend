@@ -5,20 +5,23 @@ import AccountingPeriodModel from '../../Models/AccountingPeriod'
 
 import EconomyAccountingPeriod from '../../Components/Forms/AccountingPeriod'
 
-module.exports = React.createClass({
-	getInitialState: function()
+module.exports = class Meep extends React.Component
+{
+	constructor(props)
 	{
-		var id = this.props.params.id;
+		super(props);
+
+		var id = this.props.match.params.id;
 
 		var accountingperiod = new AccountingPeriodModel({accountingperiod_id: id});
 		accountingperiod.fetch();
 
-		return {
+		this.state = {
 			model: accountingperiod,
 		};
-	},
+	}
 
-	render: function()
+	render()
 	{
 		return (
 			<div>
@@ -26,5 +29,5 @@ module.exports = React.createClass({
 				<EconomyAccountingPeriod model={this.state.model} />
 			</div>
 		);
-	},
-});
+	}
+}

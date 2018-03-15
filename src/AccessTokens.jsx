@@ -3,23 +3,21 @@ import BackboneTable from './BackboneTable'
 import DateTime from './Components/DateTime'
 import auth from './auth'
 
-module.exports = React.createClass(
+module.exports = class AccessTokens extends BackboneTable
 {
-	mixins: [Backbone.React.Component.mixin, BackboneTable],
-
-	getInitialState: function()
+	constructor(props)
 	{
-		return {
-			columns: 4,
-		};
-	},
+		super(props);
 
-	componentWillMount: function()
+		this.state.columns = 4;
+	}
+
+	componentWillMount()
 	{
 		this.fetch();
-	},
+	}
 
-	renderHeader: function()
+	renderHeader()
 	{
 		return [
 			{
@@ -35,9 +33,9 @@ module.exports = React.createClass(
 				title: "Giltig till",
 			},
 		];
-	},
+	}
 
-	renderRow: function(row, i)
+	renderRow(row, i)
 	{
 		return (
 			<tr key={i}>
@@ -51,5 +49,5 @@ module.exports = React.createClass(
 				<td><DateTime date={row.expires} /></td>
 			</tr>
 		);
-	},
-});
+	}
+}

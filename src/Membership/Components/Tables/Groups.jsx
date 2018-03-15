@@ -1,36 +1,34 @@
 import React from 'react'
-import BackboneReact from 'backbone-react-component'
 
-import { Link } from 'react-router'
+import { Link } from 'react-router-dom'
 import BackboneTable from '../../../BackboneTable'
 import TableDropdownMenu from '../../../TableDropdownMenu'
 
-module.exports = React.createClass({
-	mixins: [Backbone.React.Component.mixin, BackboneTable],
-
-	getInitialState: function()
+module.exports = class Groups extends BackboneTable
+{
+	constructor(props)
 	{
-		return {
-			columns: 9,
-		};
-	},
+		super(props);
 
-	componentWillMount: function()
+		this.state.columns = 9;
+	}
+
+	componentWillMount()
 	{
 		this.fetch();
-	},
+	}
 
-	removeTextMessage: function(group)
+	removeTextMessage(group)
 	{
 		return "Are you sure you want to remove group \"" + group.title + "\"?";
-	},
+	}
 
-	removeErrorMessage: function()
+	removeErrorMessage()
 	{
 		UIkit.notify("Error deleting group", {timeout: 0, status: "danger"});
-	},
+	}
 
-	renderHeader: function()
+	renderHeader()
 	{
 		return [
 			{
@@ -43,23 +41,23 @@ module.exports = React.createClass({
 			},
 			{
 				title: "",
-			},
+			}
 		];
-	},
+	}
 
-	renderRow: function(row, i)
+	renderRow(row, i)
 	{
 		return (
 			<tr key={i}>
-				<td><Link to={"/membership/groups/" + row.group_id}>{row.title}</Link></td>
-				<td>{row.num_members}</td>
+				<td><Link to={"/membership/groups/" + row.attributes.group_id}>{row.attributes.title}</Link></td>
+				<td>{row.attributes.num_members}</td>
 				<td>
 					<TableDropdownMenu>
-						<Link to={"/membership/groups/" + row.group_id + "/edit"}><i className="uk-icon-cog"></i> Redigera grupp</Link>
+						<Link to={"/membership/groups/" + row.attributes.group_id + "/edit"}><i className="uk-icon-cog"></i> Redigera grupp</Link>
 						{this.removeButton(i, "Ta bort grupp")}
 					</TableDropdownMenu>
 				</td>
 			</tr>
 		);
-	},
-});
+	}
+}

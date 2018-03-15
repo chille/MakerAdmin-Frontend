@@ -1,37 +1,35 @@
 import React from 'react'
-import BackboneReact from 'backbone-react-component'
 import BackboneTable from '../../../BackboneTable'
 
 import DateField from '../../../Components/Date'
-import { Link, withRouter } from 'react-router'
+import { Link, withRouter } from 'react-router-dom'
 import TableDropdownMenu from '../../../TableDropdownMenu'
 
-module.exports = withRouter(React.createClass({
-	mixins: [Backbone.React.Component.mixin, BackboneTable],
-
-	getInitialState: function()
+module.exports = withRouter(class AccountingPeriods extends BackboneTable
+{
+	constructor(props)
 	{
-		return {
-			columns: 7,
-		};
-	},
+		super(props);
 
-	componentWillMount: function()
+		this.state.columns = 7;
+	}
+
+	componentWillMount()
 	{
 		this.fetch();
-	},
+	}
 
-	removeTextMessage: function(entity)
+	removeTextMessage(entity)
 	{
 		return "Are you sure you want to remove period \"" + entity.title + "\"?";
-	},
+	}
 
-	removeErrorMessage: function()
+	removeErrorMessage()
 	{
 		UIkit.modal.alert("Error deleting period");
-	},
+	}
 
-	renderHeader: function()
+	renderHeader()
 	{
 		return [
 			{
@@ -50,9 +48,9 @@ module.exports = withRouter(React.createClass({
 				title: "",
 			},
 		];
-	},
+	}
 
-	activatePeriod: function(period)
+	activatePeriod(period)
 	{
 /*
 		console.log("Aktivera räkneskapsår " + period);
@@ -62,24 +60,24 @@ module.exports = withRouter(React.createClass({
 		config.accountingPeriod = period;
 */
 
-		this.props.router.push("/economy/" + period);
-	},
+		this.props.history.push("/economy/" + period);
+	}
 
-	renderRow: function(row, i)
+	renderRow(row, i)
 	{
 		return (
 			<tr key={i}>
-				<td><Link to={"/settings/economy/accountingperiod/" + row.accountingperiod_id + "/edit"}>{row.name}</Link></td>
-				<td>{row.title}</td>
-				<td><DateField date={row.start} /> - <DateField date={row.end} /></td>
+				<td><Link to={"/settings/economy/accountingperiod/" + row.attributes.accountingperiod_id + "/edit"}>{row.attributes.name}</Link></td>
+				<td>{row.attributes.title}</td>
+				<td><DateField date={row.attributes.start} /> - <DateField date={row.attributes.end} /></td>
 				<td>
 					<TableDropdownMenu>
-						<a onClick={this.activatePeriod.bind(this, row.name)}><i className="uk-icon-check"></i> Välj räkneskaper</a>
-						<Link to={"/settings/economy/accountingperiod/" + row.accountingperiod_id + "/edit"}><i className="uk-icon-cog"></i> Redigera räkneskapsår</Link>
+						<a onClick={this.activatePeriod.bind(this, row.attributes.name)}><i className="uk-icon-check"></i> Välj räkneskaper</a>
+						<Link to={"/settings/economy/accountingperiod/" + row.attributes.accountingperiod_id + "/edit"}><i className="uk-icon-cog"></i> Redigera räkneskapsår</Link>
 						{this.removeButton(i, "Ta bort räkneskapsår")}
 					</TableDropdownMenu>
 				</td>
 			</tr>
 		);
-	},
-}));
+	}
+});

@@ -4,8 +4,9 @@ import OverviewTable from '../Components/Tables/Overview'
 // Backbone
 import OverviewCollection from '../Collections/Overview'
 
-module.exports = React.createClass({
-	render: function()
+module.exports = class Overview extends React.Component
+{
+	render()
 	{
 		return (
 			<div>
@@ -16,5 +17,5 @@ module.exports = React.createClass({
 				<OverviewTable type={OverviewCollection} />
 			</div>
 		);
-	},
-});
+	}
+}

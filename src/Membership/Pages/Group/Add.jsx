@@ -6,15 +6,18 @@ import GroupModel from '../../Models/Group'
 import Group from '../../Components/Forms/Group'
 import { withRouter } from 'react-router'
 
-module.exports = withRouter(React.createClass({
-	getInitialState: function()
+module.exports = class Add extends React.Component
+{
+	constructor()
 	{
-		return {
-			model: new GroupModel(),
-		};
-	},
+		super();
 
-	render: function()
+		this.state = {
+			model: new GroupModel()
+		};
+	}
+
+	render()
 	{
 		return (
 			<div>
@@ -22,5 +25,5 @@ module.exports = withRouter(React.createClass({
 				<Group model={this.state.model} route={this.props.route} />
 			</div>
 		);
-	},
-}));
+	}
+}

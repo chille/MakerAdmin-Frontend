@@ -1,28 +1,26 @@
 import React from 'react'
-import BackboneReact from 'backbone-react-component'
-import { Link } from 'react-router'
+import { Link } from 'react-router-dom'
 import Currency from '../../../Components/Currency'
 import DateField from '../../../Components/Date'
 
 // Backbone
 import BackboneTable from '../../../BackboneTable'
 
-module.exports = React.createClass({
-	mixins: [Backbone.React.Component.mixin, BackboneTable],
-
-	getInitialState: function()
+module.exports = class Overview extends BackboneTable
+{
+	constructor(props)
 	{
-		return {
-			columns: 5,
-		};
-	},
+		super(props);
 
-	componentWillMount: function()
+		this.state.columns = 5;
+	}
+
+	componentWillMount()
 	{
 		this.fetch();
-	},
+	}
 
-	renderHeader: function ()
+	renderHeader ()
 	{
 		return [
 			{
@@ -42,9 +40,9 @@ module.exports = React.createClass({
 				title: "Local storage",
 			},
 		];
-	},
+	}
 
-	renderRow: function (row, i)
+	renderRow(row, i)
 	{
 		return (
 			<tr key={i}>
@@ -61,5 +59,5 @@ module.exports = React.createClass({
 				</td>
 			</tr>
 		);
-	},
-});
+	}
+}

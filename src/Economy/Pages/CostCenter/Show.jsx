@@ -5,21 +5,24 @@ import CostCenterModel from '../../Models/CostCenter'
 
 import EconomyCostCenter from '../../Components/Forms/CostCenter'
 
-module.exports = React.createClass({
-	getInitialState: function()
+module.exports = class Meep extends React.Component
+{
+	constructor(props)
 	{
-		var id = this.props.params.id;
+		super(props);
+
+		var id = this.props.match.params.id;
 
 		var costcenter = new CostCenterModel({id: id});
 		costcenter.fetch();
 
-		return {
+		this.state = {
 			model: costcenter
 		};
-	},
+	}
 
-	render: function()
+	render()
 	{
 		return (<EconomyCostCenter model={this.state.model} />);
 	}
-});
+}

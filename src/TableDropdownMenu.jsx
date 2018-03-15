@@ -1,7 +1,8 @@
 import React from 'react'
 
-module.exports = React.createClass({
-	render: function()
+module.exports = class TableDropdownMenu extends React.Component
+{
+	render()
 	{
 		return(
 			<div className="uk-align-right uk-text-left uk-margin-remove">
@@ -18,4 +19,4 @@ module.exports = React.createClass({
 			</div>
 		);
 	}
-});
+}

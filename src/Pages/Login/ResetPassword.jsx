@@ -6,7 +6,8 @@ module.exports = withRouter(class LoginResetPassword extends React.Component
 {
 	cancel()
 	{
-		this.props.router.push("/");
+		console.log(this.props);
+		this.props.history.push("/");
 	}
 
 	submit(e)
@@ -25,7 +26,7 @@ module.exports = withRouter(class LoginResetPassword extends React.Component
 		auth.requestPassword(username);
 
 		UIkit.modal.alert("Ett E-postmeddelande med information om hur du nollställer ditt lösenord har skickats till " + username);
-		this.props.router.push("/");
+		this.props.history.push("/");
 	}
 
 	render()
@@ -55,7 +56,7 @@ module.exports = withRouter(class LoginResetPassword extends React.Component
 							</div>
 
 							<div className="uk-form-row">
-								<button type="button" onClick={this.cancel.bind()} className="uk-width-1-1 uk-button uk-button-danger uk-button-large"><span className="uk-icon-close" /> Avbryt</button>
+								<button type="button" onClick={this.cancel.bind(this)} className="uk-width-1-1 uk-button uk-button-danger uk-button-large"><span className="uk-icon-close" /> Avbryt</button>
 							</div>
 						</form>
 					</div>

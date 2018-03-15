@@ -1,20 +1,17 @@
 import React from 'react'
-import BackboneReact from 'backbone-react-component'
 
 // Backbone
 import InvoiceCollection from '../../Collections/Invoice'
 import InvoiceModel from '../../Models/Invoice'
 
-import { Link, withRouter } from 'react-router'
+import { Link, withRouter } from 'react-router-dom'
 import Currency from '../../../Components/Currency'
 import DateField from '../../../Components/Date'
-import BackboneTable from '../../../BackboneTable'
 import TableFilterBox from '../../../TableFilterBox'
 
-module.exports = withRouter(React.createClass({
-	mixins: [Backbone.React.Component.mixin],
-
-	render: function()
+module.exports = withRouter(class Meep extends React.Component
+{
+	render()
 	{
 		if(this.state.model.posts.length == 0)
 		{
@@ -22,8 +19,8 @@ module.exports = withRouter(React.createClass({
 		}
 		else
 		{
-			var currency = this.state.model.currency;
-			var content = this.state.model.posts.map(function (row, i)
+			var currency = this.state.model.attributes.currency;
+			var content = this.state.model.attributes.posts.map(function (row, i)
 			{
 				// row.weight
 				// row.type
@@ -47,68 +44,68 @@ module.exports = withRouter(React.createClass({
 
 		return (
 			<div className="invoice">
-				{this.state.model.invoice_number != "" ? 
-					<a href={"/economy/" + this.props.params.period + "/invoice/" + this.state.model.invoice_number + "/export"}>Exportera *.ODT</a>
+				{this.state.model.attributes.invoice_number != "" ? 
+					<a href={"/economy/" + this.props.match.params.period + "/invoice/" + this.state.model.attributes.invoice_number + "/export"}>Exportera *.ODT</a>
 				: ""}
 
 				<div className="uk-grid">
 					<div className="uk-width-1-3 box">
 						<div className="title">Mottagare</div>
-						<div className="data">{this.state.model.title}</div>
+						<div className="data">{this.state.model.attributes.title}</div>
 					</div>
 
 					<div className="uk-width-1-3 box">
 						<div className="title">Belopp</div>
-						<div className="data"><Currency value={this.state.model._total} currency={currency} /></div>
+						<div className="data"><Currency value={this.state.model.attributes._total} currency={currency} /></div>
 					</div>
 
 					<div className="uk-width-1-3 box">
 						<div className="title">Status</div>
-						<div className="data">{this.state.model.status}</div>
+						<div className="data">{this.state.model.attributes.status}</div>
 					</div>
 
 					<div className="uk-width-1-3 box">
 						<div className="title">Er referens</div>
-						<div className="data">{this.state.model.your_reference}</div>
+						<div className="data">{this.state.model.attributes.your_reference}</div>
 					</div>
 
 					<div className="uk-width-1-3 box">
 						<div className="title">Fakturadatum</div>
-						<div className="data">{this.state.model.date_invoice}</div>
+						<div className="data">{this.state.model.attributes.date_invoice}</div>
 					</div>
 
 					<div className="uk-width-1-3 box">
 						<div className="title">Fakturanummer</div>
-						<div className="data">{this.state.model.invoice_number}</div>
+						<div className="data">{this.state.model.attributes.invoice_number}</div>
 					</div>
 
 					<div className="uk-width-1-3 box">
 						<div className="title">Vår referens</div>
-						<div className="data">{this.state.model.our_reference}</div>
+						<div className="data">{this.state.model.attributes.our_reference}</div>
 					</div>
 
 					<div className="uk-width-1-3 box">
 						<div className="title">Förfallodatum</div>
-						<div className="data">{this.state.model.date_expiry}</div>
+						<div className="data">{this.state.model.attributes.date_expiry}</div>
 					</div>
 
 					<div className="uk-width-1-3 box">
 						<div className="title">Betalningsvillkor</div>
-						<div className="data">{this.state.model.conditions} dagar</div>
+						<div className="data">{this.state.model.attributes.conditions} dagar</div>
 					</div>
 				</div>
 
 				<div className="box">
 					<div className="title">Kommentar</div>
 					<div className="data">
-						<pre>{this.state.model.description}</pre>
+						<pre>{this.state.model.attributes.description}</pre>
 					</div>
 				</div>
 
 				<div className="box">
 					<div className="title">Adress</div>
 					<div className="data">
-						<pre>{this.state.model.address}</pre>
+						<pre>{this.state.model.attributes.address}</pre>
 					</div>
 				</div>
 
@@ -128,5 +125,5 @@ module.exports = withRouter(React.createClass({
 				</table>
 			</div>
 		);
-	},
-}));
+	}
+});

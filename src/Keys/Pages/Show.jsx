@@ -6,28 +6,31 @@ import KeyModel from '../Models/Key'
 import Key from '../Components/Forms/Key'
 import { withRouter } from 'react-router'
 
-module.exports = withRouter(React.createClass({
-	getInitialState: function()
+module.exports = withRouter(class Show extends React.Component
+{
+	constructor(props)
 	{
+		super(props);
+
 		var key = new KeyModel({
-			key_id: this.props.params.id
+			key_id: this.props.match.params.id
 		});
 
 		key.fetch();
 
-		return {
+		this.state =  {
 			model: key,
 		};
-	},
+	}
 
-	render: function()
+	render()
 	{
 		return (
 			<div>
-				<h2>Redigera RFID-tagg</h2>
+				<h2>Redigera RFID-nyckel</h2>
 				<Key model={this.state.model} route={this.props.route} />
 			</div>
 		);
-	},
-}));
+	}
+});
 //KeysOverviewHandler.title = "Nycklar";

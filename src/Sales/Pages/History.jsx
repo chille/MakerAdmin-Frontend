@@ -7,28 +7,31 @@ import SalesHistoryModel from '../Models/SalesHistory'
 import TableFilterBox from '../../TableFilterBox'
 import History from '../Components/Tables/History'
 
-module.exports = React.createClass({
-	getInitialState: function()
+module.exports = class Meep extends React.Component
+{
+	constructor(props)
 	{
-		return {
+		super(props);
+
+		this.state = {
 			filters: this.props.filters || {},
 		};
-	},
+	}
 
-	updateFilters: function(newFilter)
+	updateFilters(newFilter)
 	{
 		var filters = this.overrideFiltersFromProps(newFilter);
 		this.setState({
 			filters: filters
 		});
-	},
+	}
 
-	overrideFiltersFromProps: function(filters)
+	overrideFiltersFromProps(filters)
 	{
 		return filters;
-	},
+	}
 
-	render: function()
+	render()
 	{
 		return (
 			<div>
@@ -38,6 +41,6 @@ module.exports = React.createClass({
 				<History type={SalesHistoryCollection} filters={this.state.filters} />
 			</div>
 		);
-	},
-});
+	}
+}
 //SalesHistoryHandler.title = "Visa försäljning";

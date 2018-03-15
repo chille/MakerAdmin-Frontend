@@ -6,15 +6,16 @@ import MemberModel from '../../Models/Member'
 import MemberForm from '../../Components/Forms/Member'
 import { withRouter } from 'react-router'
 
-module.exports = withRouter(React.createClass({
-	getInitialState: function()
+module.exports = class Add extends React.Component
+{
+	constructor()
 	{
-		return {
+		this.state = {
 			model: new MemberModel(),
 		};
-	},
+	}
 
-	render: function()
+	render()
 	{
 		return (
 			<div>
@@ -22,6 +23,6 @@ module.exports = withRouter(React.createClass({
 				<MemberForm model={this.state.model} route={this.props.route} />
 			</div>
 		);
-	},
-}));
+	}
+}
 //MemberAddHandler.title = "Skapa medlem";

@@ -5,8 +5,9 @@ import ProductModel from '../../Models/Product'
 
 import ProductForm from '../../Components/Forms/Product'
 
-module.exports = React.createClass({
-	render: function()
+module.exports = class Meep extends React.Component
+{
+	render()
 	{
 		return (
 			<div>
@@ -15,5 +16,5 @@ module.exports = React.createClass({
 				<ProductForm />
 			</div>
 		);
-	},
-});
+	}
+}

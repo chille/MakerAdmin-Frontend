@@ -7,9 +7,12 @@ import Loading from './Components/Loading'
 /**
  * This is a mixin used with Backbone to provide error handlers.
  */
-var BackboneTable = {
-	getInitialState: function()
+module.exports = class BackboneTable extends React.Component
+{
+	constructor(props)
 	{
+		super(props);
+
 		var _this = this;
 
 		// Create an array with options used for extending the collection
@@ -66,9 +69,12 @@ var BackboneTable = {
 
 		// Create a new extended collection
 		var data = new ExtendedCollection(null, null);
+		data.on("update", this.onChange.bind(this));
+
+		//TODO1: What event should we update on?
 
 		this.pagination = [];
-		return {
+		this.state = {
 			status: "done",
 			collection: data,
 			showPagination: true,
@@ -77,9 +83,18 @@ var BackboneTable = {
 			filters: this.props.filters || {},
 			dataSource: this.props.dataSource || {},
 		};
-	},
+	}
 
-	componentWillReceiveProps: function(nextProps)
+	onChange(a)
+	{
+//		console.log("change");
+//		console.log(a);
+//		console.log(this.state.collection.length);
+
+		this.setState({collection: this.state.collection});
+	}
+
+	componentWillReceiveProps(nextProps)
 	{
 		if(nextProps.hasOwnProperty("filters") && nextProps.filters != this.state.filters)
 		{
@@ -91,11 +106,11 @@ var BackboneTable = {
 			var _this = this;
 			setTimeout(function() {
 				_this.fetch();
-			}, 100);
+			}, 0);
 		}
-	},
+	}
 
-	initializePagination: function(i)
+	initializePagination(i)
 	{
 		var _this = this;
 
@@ -125,9 +140,9 @@ var BackboneTable = {
 				});
 			}
 		}
-	},
+	}
 
-	updatePagination: function(last_page)
+	updatePagination(last_page)
 	{
 		// Initialize top and bottom pagination
 		for(var i = 1; i <= 2; i++)
@@ -139,9 +154,9 @@ var BackboneTable = {
 				this.pagination[i].render();
 			}
 		}
-	},
+	}
 
-	edit: function(key)
+	edit(key)
 	{
 		if(this.props.hasOwnProperty("onEdit"))
 		{
@@ -151,9 +166,9 @@ var BackboneTable = {
 		{
 			this.onEdit(key);
 		}
-	},
+	}
 
-	remove: function(entity)
+	remove(entity)
 	{
 		var _this = this;
 		UIkit.modal.confirm(this.removeTextMessage(entity.attributes), function() {
@@ -197,9 +212,9 @@ var BackboneTable = {
 			});
 		});
 		return false;
-	},
+	}
 
-	editButton: function(i, text)
+	editButton(i, text)
 	{
 		if(text === undefined)
 		{
@@ -207,11 +222,11 @@ var BackboneTable = {
 		}
 
 		return (
-			<a onClick={this.edit.bind(this, this.getCollection().at(i))}><i className="uk-icon-cog" /> {text}</a>
+			<a onClick={this.edit.bind(this, this.state.collection.at(i))}><i className="uk-icon-cog" /> {text}</a>
 		);
-	},
+	}
 
-	removeButton: function(i, text)
+	removeButton(i, text)
 	{
 		if(text === undefined)
 		{
@@ -219,11 +234,11 @@ var BackboneTable = {
 		}
 
 		return (
-			<a onClick={this.remove.bind(this, this.getCollection().at(i))} className="removebutton"><i className="uk-icon-trash"></i> {text}</a>
+			<a onClick={this.remove.bind(this, this.state.collection.at(i))} className="removebutton"><i className="uk-icon-trash"></i> {text}</a>
 		);
-	},
+	}
 
-	componentWillMount: function()
+	componentWillMount()
 	{
 		this.wrapper.setCollections(this.state.collection);
 
@@ -269,51 +284,56 @@ var BackboneTable = {
 				status: "error"
 			});
 		});
-	},
+	}
 
-	componentDidMount: function()
+	componentDidMount()
 	{
 		var _this = this;
 		window.requestAnimationFrame(function()
 		{
 			_this.initializePagination();
 		});
-	},
+	}
 
 	// Fetch data from server
-	fetch: function()
+	fetch()
 	{
-		// Merge query string parameters
-		if(this.state.dataSource !== undefined && this.state.dataSource.params !== undefined)
+		var _this = this;
+		setTimeout(function()
 		{
-			var filters = Object.assign(this.state.dataSource.params, this.state.filters);
-		}
-		else
-		{
-			var filters = Object.assign(this.state.filters);
-		}
+			// Merge query string parameters
+			if(_this.state.dataSource !== undefined && _this.state.dataSource.params !== undefined)
+			{
+				var filters = Object.assign(_this.state.dataSource.params, _this.state.filters);
+			}
+			else
+			{
+				var filters = Object.assign(_this.state.filters);
+			}
 
-		// Pagination
-		var pageIndex = 0;
-		if(this.pagination[1])
-		{
-			// Get the current selected page from the top paginator
-			pageIndex = this.pagination[1].currentPage;
-		}
+			// Pagination
+			var pageIndex = 0;
+			if(_this.pagination[1])
+			{
+				// Get the current selected page from the top paginator
+				pageIndex = _this.pagination[1].currentPage;
+			}
 
-		filters.page = pageIndex + 1;
+			filters.page = pageIndex + 1;
 
-		// Apply sort
-		filters.sort_by = this.state.sort_column;
-		filters.sort_order = this.state.sort_order;
+			// Apply sort
+			filters.sort_by = _this.state.sort_column;
+			filters.sort_order = _this.state.sort_order;
 
-		// Send request to server
-		this.getCollection().fetch({
-			data: filters,
-		});
-	},
+			// Send request to server
+			console.log(_this.state.collection)
+			_this.state.collection.fetch({
+				data: filters,
+			});
+		}, 0);
+	}
 
-	render: function ()
+	render()
 	{
 		var _this = this;
 
@@ -336,7 +356,7 @@ var BackboneTable = {
 				<tr key="0">
 					<td colSpan={this.state.columns} className="uk-text-center">
 						<p>
-							<em>Hämtning av data misslyckades.</em>&nbsp;&nbsp;<button className="uk-button uk-button-primary uk-button-mini" onClick={this.tryAgain}><i className="uk-icon-refresh"></i> Försök igen</button>
+							<em>Hämtning av data misslyckades.</em>&nbsp;&nbsp;<button className="uk-button uk-button-primary uk-button-mini" onClick={this.tryAgain.bind(this)}><i className="uk-icon-refresh"></i> Försök igen</button>
 						</p>
 					</td>
 				</tr>
@@ -344,6 +364,8 @@ var BackboneTable = {
 		}
 		else if(this.state.collection.length == 0)
 		{
+			console.log("xx");
+			console.log(this.state.collection);
 			// Collection is empty
 			var content = (
 				<tr key="0">
@@ -356,7 +378,7 @@ var BackboneTable = {
 		else
 		{
 			// Collection is an array
-			var content = this.state.collection.map(this.renderRow);
+			var content = this.state.collection.map(this.renderRow.bind(this));
 		}
 
 		return (
@@ -377,7 +399,7 @@ var BackboneTable = {
 										return (
 											<th key={i} className={column.class}>
 												{column.sort ?
-													<a data-sort={column.sort} onClick={_this.sort}>{column.title} {icon}</a>
+													<a data-sort={column.sort} onClick={_this.sort.bind(_this)}>{column.title} {icon}</a>
 													: column.title
 												}
 											</th>
@@ -399,9 +421,9 @@ var BackboneTable = {
 				{this.renderPagination(2)}
 			</div>
 		);
-	},
+	}
 
-	sort: function(event)
+	sort(event)
 	{
 		if(event.target.dataset.sort != this.state.sort_column)
 		{
@@ -425,13 +447,13 @@ var BackboneTable = {
 		var _this = this;
 		setTimeout(function() {
 			_this.fetch();
-		}, 100);
-	},
+		}, 0);
+	}
 
-	tryAgain: function()
+	tryAgain()
 	{
 		this.fetch();
-	},
+	}
 
 	renderPagination(i)
 	{
@@ -443,7 +465,5 @@ var BackboneTable = {
 				</ul>
 			);
 		}
-	},
+	}
 };
-
-module.exports = BackboneTable;

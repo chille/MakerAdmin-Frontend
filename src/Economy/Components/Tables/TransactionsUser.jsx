@@ -1,27 +1,25 @@
 import React from 'react'
-import BackboneReact from 'backbone-react-component'
 import BackboneTable from '../../../BackboneTable'
-import { Link } from 'react-router'
+import { Link } from 'react-router-dom'
 import Currency from '../../../Components/Currency'
 import DateField from '../../../Components/Date'
 import TableDropdownMenu from '../../../TableDropdownMenu'
 
-module.exports = React.createClass({
-	mixins: [Backbone.React.Component.mixin, BackboneTable],
-
-	getInitialState: function()
+module.exports = class Meep extends BackboneTable
+{
+	constructor(props)
 	{
-		return {
-			columns: 4,
-		};
-	},
+		super(props);
 
-	componentWillMount: function()
+		this.state.columns = 4;
+	}
+
+	componentWillMount()
 	{
 		this.fetch();
-	},
+	}
 
-	renderHeader: function()
+	renderHeader()
 	{
 		return [
 			{
@@ -41,22 +39,22 @@ module.exports = React.createClass({
 				title: "",
 			},
 		];
-	},
+	}
 
-	renderRow: function (row, i)
+	renderRow(row, i)
 	{
 		return (
 			<tr key={i}>
-				<td><DateField date={row.accounting_date}/></td>
-				<td><Link to={"/economy/" + row.period + "/instruction/" + row.instruction_number}>{row.transaction_title}</Link></td>
-				<td className="uk-text-right"><Currency value={row.amount} currency="SEK" /></td>
+				<td><DateField date={row.attributes.accounting_date}/></td>
+				<td><Link to={"/economy/" + row.attributes.period + "/instruction/" + row.attributes.instruction_number}>{row.attributes.transaction_title}</Link></td>
+				<td className="uk-text-right"><Currency value={row.attributes.amount} currency="SEK" /></td>
 				<td>
 					<TableDropdownMenu>
-						<Link to={"/product/" + row.entity_id + "/edit"}><i className="uk-icon-cog" /> Redigera metadata</Link>
-						<Link to={"/economy/" + row.period + "/instruction/" + row.instruction_number}><i className="uk-icon-cog" /> Visa verifikation</Link>
+						<Link to={"/product/" + row.attributes.entity_id + "/edit"}><i className="uk-icon-cog" /> Redigera metadata</Link>
+						<Link to={"/economy/" + row.attributes.period + "/instruction/" + row.attributes.instruction_number}><i className="uk-icon-cog" /> Visa verifikation</Link>
 					</TableDropdownMenu>
 				</td>
 			</tr>
 		);
-	},
-});
+	}
+}

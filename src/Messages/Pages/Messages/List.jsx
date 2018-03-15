@@ -3,11 +3,12 @@ import React from 'react'
 // Backbone
 import MessagesCollection from '../../Collections/Messages'
 
-import { Link } from 'react-router'
+import { Link } from 'react-router-dom'
 import MessagesTable from '../../Components/Tables/Messages'
 
-module.exports = React.createClass({
-	render: function()
+module.exports = class Meep extends React.Component
+{
+	render()
 	{
 		return (
 			<div>
@@ -18,6 +19,6 @@ module.exports = React.createClass({
 				<MessagesTable type={MessagesCollection} />
 			</div>
 		);
-	},
-});
+	}
+}
 //Messages.title = "Utskickshistorik";

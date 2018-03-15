@@ -3,33 +3,36 @@ import React from 'react'
 // Backbone
 import MemberCollection from '../../Collections/Member'
 
-import { Link } from 'react-router'
+import { Link } from 'react-router-dom'
 import TableFilterBox from '../../../TableFilterBox'
 
 import Members from '../../Components/Tables/Members'
 
-module.exports = React.createClass({
-	getInitialState: function()
+module.exports = class List extends React.Component
+{
+	constructor(props)
 	{
-		return {
-			filters: this.props.filters || {},
-		};
-	},
+		super(props);
 
-	updateFilters: function(newFilter)
+		this.state = {
+			filters: this.props.filters || {}
+		};
+	}
+
+	updateFilters(newFilter)
 	{
 		var filters = this.overrideFiltersFromProps(newFilter);
 		this.setState({
 			filters: filters
 		});
-	},
+	}
 
-	overrideFiltersFromProps: function(filters)
+	overrideFiltersFromProps(filters)
 	{
 		return filters;
-	},
+	}
 
-	render: function()
+	render()
 	{
 		return (
 			<div>
@@ -42,6 +45,6 @@ module.exports = React.createClass({
 				<Members type={MemberCollection} filters={this.state.filters} />
 			</div>
 		);
-	},
-});
+	}
+}
 //MembersHandler.title = "Visa medlemmar";

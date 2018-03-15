@@ -1,26 +1,24 @@
 import React from 'react'
-import BackboneReact from 'backbone-react-component'
 import BackboneTable from '../../../BackboneTable'
 
-import { Link } from 'react-router'
+import { Link } from 'react-router-dom'
 //import Currency from '../../../Components/Currency'
 
-module.exports = React.createClass({
-	mixins: [Backbone.React.Component.mixin, BackboneTable],
-
-	getInitialState: function()
+module.exports = class CostCenters extends BackboneTable
+{
+	constructor(props)
 	{
-		return {
-			columns: 5,
-		};
-	},
+		super(props);
 
-	componentWillMount: function()
+		this.state.columns = 5;
+	}
+
+	componentWillMount()
 	{
 		this.fetch();
-	},
+	}
 
-	renderHeader: function ()
+	renderHeader()
 	{
 		return [
 			{
@@ -38,16 +36,16 @@ module.exports = React.createClass({
 		];
 	},
 
-	renderRow: function (row, i)
+	renderRow(row, i)
 	{
 		return (
 			<tr key={i}>
-				<td><Link to={"/economy/instruction/" + row.id}>{row.verification_number}</Link></td>
-				<td>{row.accounting_date}</td>
-				<td>{row.title}</td>
-				<td>{row.amount}</td>
-				<td><Link to={"/economy/instruction/" + row.id}>Visa</Link></td>
+				<td><Link to={"/economy/instruction/" + row.attributes.id}>{row.attributes.verification_number}</Link></td>
+				<td>{row.attributes.accounting_date}</td>
+				<td>{row.attributes.title}</td>
+				<td>{row.attributes.amount}</td>
+				<td><Link to={"/economy/instruction/" + row.attributes.id}>Visa</Link></td>
 			</tr>
 		);
-	},
-});
+	}
+}

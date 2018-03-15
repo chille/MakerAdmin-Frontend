@@ -6,18 +6,21 @@ import InstructionModel from '../../Models/Instruction'
 import EconomyAccountingInstruction from '../../Components/Forms/Instruction'
 import { withRouter } from 'react-router'
 
-module.exports = withRouter(React.createClass({
-	getInitialState: function()
+module.exports = withRouter(class Meep extends React.Component
+{
+	constructor()
 	{
+		super();
+
 		var instruction = new InstructionModel();
 
-		return {
+		this.state = {
 			model: instruction
 		};
-	},
+	}
 
-	render: function()
+	render()
 	{
 		return (<EconomyAccountingInstruction model={this.state.model} route={this.props.route} />);
 	}
-}));
+});

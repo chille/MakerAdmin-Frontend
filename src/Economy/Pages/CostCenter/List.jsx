@@ -5,8 +5,9 @@ import CostCenterCollection from '../../Collections/CostCenter'
 
 import EconomyCostCenters from './../../Components/Tables/CostCenters'
 
-module.exports = React.createClass({
-	render: function()
+module.exports = class Meep extends React.Component
+{
+	render()
 	{
 		return (
 			<div>
@@ -14,10 +15,10 @@ module.exports = React.createClass({
 				<EconomyCostCenters
 					type={CostCenterCollection}
 					dataSource={{
-						url: "/economy/" + this.props.params.period + "/costcenter"
+						url: "/economy/" + this.props.match.params.period + "/costcenter"
 					}}
 				/>
 			</div>
 		);
-	},
-});
+	}
+}

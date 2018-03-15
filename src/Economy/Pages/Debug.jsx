@@ -1,7 +1,8 @@
 import React from 'react'
 
-module.exports = React.createClass({
-	render: function ()
+module.exports = class Meep extends React.Component
+{
+	render()
 	{
 		return (
 			<div className="uk-width-1-1">
@@ -9,4 +10,4 @@ module.exports = React.createClass({
 			</div>
 		);
 	}
-});
+}

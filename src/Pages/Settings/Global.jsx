@@ -1,7 +1,8 @@
 import React from 'react'
 
-module.exports = React.createClass({
-	render: function()
+module.exports = class Global extends React.Component
+{
+	render()
 	{
 		return (
 			<div>
@@ -20,5 +21,5 @@ module.exports = React.createClass({
 				</ul>
 			</div>
 		);
-	},
-});
+	}
+}

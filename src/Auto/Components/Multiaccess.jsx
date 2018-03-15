@@ -1,20 +1,23 @@
 import React from 'react'
-import { Link } from 'react-router'
+import { Link } from 'react-router-dom'
 import DateField from '../../Components/DateTime'
 import auth from '../../auth'
 import KeyModel from '../../Keys/Models/Key'
 import MemberModel from '../../Membership/Models/Member'
 
-module.exports = React.createClass({
-	getInitialState: function()
+module.exports = class MultiAccess extends React.Component
+{
+	constructor()
 	{
-		return {
+		super();
+
+		this.state = {
 			data: null,
 			fetched_data: false,
 		};
-	},
+	}
 
-	componentWillReceiveProps: function(props)
+	componentWillReceiveProps(props)
 	{
 		if(props.filename !== "")
 		{
@@ -36,9 +39,9 @@ module.exports = React.createClass({
 				}.bind(this)
 			});
 		}
-	},
+	}
 
-	createLocalKey: function(key)
+	createLocalKey(key)
 	{
 
 		// Create a new key
@@ -71,9 +74,9 @@ module.exports = React.createClass({
 */
 			},
 		});
-	},
+	}
 
-	render: function()
+	render()
 	{
 		var _this = this;
 		var date_mismatch = [];
@@ -245,4 +248,4 @@ module.exports = React.createClass({
 			);
 		}
 	}
-});
+}

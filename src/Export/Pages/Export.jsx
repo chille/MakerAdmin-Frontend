@@ -1,7 +1,8 @@
 import React from 'react'
 
-module.exports = React.createClass({
-	render: function()
+module.exports = class Export extends React.Component
+{
+	render()
 	{
 		return (
 			<div>
@@ -9,5 +10,5 @@ module.exports = React.createClass({
 				<p>Kör en request mot API och plocka ut data med hjälp av samma filtreringsinställnigar som finns i övriga gränssnitt. Konvertera sedan detta till en *.csv, eller annat lämpligt format och låt användaren ladda hem en fil.</p>
 			</div>
 		);
-	},
-});
+	}
+}

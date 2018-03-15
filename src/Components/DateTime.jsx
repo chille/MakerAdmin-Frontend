@@ -1,7 +1,8 @@
 import React from 'react'
 
-module.exports = React.createClass({
-	render: function()
+module.exports = class DateTime extends React.Component
+{
+	render()
 	{
 		var str = <em>Ej angivet</em>;
 		if(this.props.date !== undefined && this.props.date != "")
@@ -24,5 +25,5 @@ module.exports = React.createClass({
 		}
 
 		return (<span>{str}</span>);
-	},
-});
+	}
+}

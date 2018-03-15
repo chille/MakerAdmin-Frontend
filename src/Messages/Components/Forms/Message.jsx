@@ -1,17 +1,18 @@
 import React from 'react'
-import { Link, withRouter } from 'react-router'
+import { Link, withRouter } from 'react-router-dom'
 import { Async } from 'react-select';
-import GenericEntityFunctions from '../../../GenericEntityFunctions'
+import GenericEntityForm from '../../../Components/Form/GenericEntityForm'
 import auth from '../../../auth'
 
 // Backbone
 import TemplateModel from '../../Models/Template'
 
-module.exports = withRouter(React.createClass({
-	mixins: [Backbone.React.Component.mixin, GenericEntityFunctions],
-
-	getInitialState: function()
+module.exports = withRouter(class Message extends GenericEntityForm
+{
+	constructor(props)
 	{
+		super(props);
+
 		// Load template
 		var _this = this;
 		if(this.props.location.query.template !== undefined)
@@ -20,7 +21,7 @@ module.exports = withRouter(React.createClass({
 			template.fetch({success: function(data)
 			{
 				console.log("Done loading");
-				_this.getModel().set({
+				_this.model.set({
 					subject: data.get("title"),
 					body: data.get("description"),
 				});
@@ -30,7 +31,7 @@ module.exports = withRouter(React.createClass({
 		var hideRecipientField = false;
 
 		// The message_type attribute should not affect the isDirty() function on the model
-		this.getModel().ignoreAttributes.push("message_type");
+		this.model.ignoreAttributes.push("message_type");
 
 		// The form should have an hardcoded recipient
 		if(this.props.recipient !== undefined)
@@ -38,61 +39,59 @@ module.exports = withRouter(React.createClass({
 			// Save recipient in model
 			var recipients = [];
 			recipients.push(this.props.recipient);
-			this.getModel().set("recipients", recipients);
+			this.model.set("recipients", recipients);
 
 			// A a hardcoded recipient list should not affect the isDirty() function on the model
-			this.getModel().ignoreAttributes.push("recipients");
+			this.model.ignoreAttributes.push("recipients");
 
 			// Hide form field from rendering
 			hideRecipientField = true;
 		}
 
 		// Return default data
-		return {
-			recipients: [],
-			hideRecipientField,
-		};
-	},
+		this.state.recipients = [];
+		this.state.hideRecipientField = hideRecipientField;
+	}
 
-	onCreate: function(model)
+	onCreate(model)
 	{
 		this.setState({ignoreExitHook: true});
-		this.props.router.push("/messages");
+		this.props.history.push("/messages");
 		UIkit.notify("Ditt meddelande har skickats", {status: "success"});
-	},
+	}
 
-	onSaveError: function()
+	onSaveError()
 	{
 		UIkit.notify("Ett fel uppstod när meddelandet skulle skickas", {timeout: 0, status: "danger"});
-	},
+	}
 
-	onCancel: function(entity)
+	onCancel(entity)
 	{
-		this.props.router.push("/messages");
-	},
+		this.props.history.push("/messages");
+	}
 
 	// Change the between E-mail and SMS
-	changeType: function()
+	changeType()
 	{
 		// The subject should not affect the isDirty when the message type is set to SMS
 		if(this.refs.message_type.value == "sms")
 		{
-			this.getModel().ignoreAttributes.push("subject");
+			this.model.ignoreAttributes.push("subject");
 		}
 		else
 		{
-			var index = this.getModel().ignoreAttributes.indexOf("subject");
+			var index = this.model.ignoreAttributes.indexOf("subject");
 			if(index > -1)
 			{
-				this.getModel().ignoreAttributes.splice(index, 1);
+				this.model.ignoreAttributes.splice(index, 1);
 			}
 		}
 
-		this.getModel().set("message_type", this.refs.message_type.value);
-	},
+		this.model.set("message_type", this.refs.message_type.value);
+	}
 
 	// Change recipients
-	changeRecipient: function(value)
+	changeRecipient(value)
 	{
 		// Keep a separate list of recipients so the auto complete plugin get it's own format
 		this.setState({recipients: value});
@@ -104,35 +103,35 @@ module.exports = withRouter(React.createClass({
 		});
 
 		// Update the model with the filtered recipient list
-		this.getModel().set("recipients", filteredRecipients);
+		this.model.set("recipients", filteredRecipients);
 
 		// Clear the search history so there is no drop down with old data after adding a recipient
 		this.refs.recps.setState({options: []});
-	},
+	}
 
 	// Change the subject
-	changeSubject: function()
+	changeSubject()
 	{
-		this.getModel().set("subject", this.refs.subject.value);
-	},
+		this.model.set("subject", this.refs.subject.value);
+	}
 
 	// Change message body
-	changeBody: function()
+	changeBody()
 	{
-		this.getModel().set("body", this.refs.body.value);
+		this.model.set("body", this.refs.body.value);
 
 		// Update the character counter
 		$("#characterCounter").html(this.refs.body.value.length);
-	},
+	}
 
 	// Disable the send button if there is not enough data in the form
-	enableSendButton: function()
+	enableSendButton()
 	{
 		// Validate SMS
 		if(
-			this.state.model.message_type == "sms" &&
-			this.state.model.recipients.length > 0 &&
-			this.state.model.body.length > 0
+			this.state.model.attributes.message_type == "sms" &&
+			this.state.model.attributes.recipients.length > 0 &&
+			this.state.model.attributes.body.length > 0
 		)
 		{
 			// Enable button
@@ -140,10 +139,10 @@ module.exports = withRouter(React.createClass({
 		}
 		// Validate E-mail
 		else if(
-			this.state.model.message_type == "email" &&
-			this.state.model.recipients.length > 0 &&
-			this.state.model.subject.length > 0 &&
-			this.state.model.body.length > 0
+			this.state.model.attributes.message_type == "email" &&
+			this.state.model.attributes.recipients.length > 0 &&
+			this.state.model.attributes.subject.length > 0 &&
+			this.state.model.attributes.body.length > 0
 		)
 		{
 			// Enable button
@@ -152,16 +151,16 @@ module.exports = withRouter(React.createClass({
 
 		// Disable button
 		return false;
-	},
+	}
 
 	// Disable client side filtering
-	filter: function(option, filterString)
+	filter(option, filterString)
 	{
 		return option;
-	},
+	}
 
 	// Called when the user is typing anything in the recipient input
-	search: function(input, callback)
+	search(input, callback)
 	{
 		// Clear the search history so there is no drop down with old data when search text input is empty
 		if(!input)
@@ -186,10 +185,10 @@ module.exports = withRouter(React.createClass({
 				options: list,
 			});
 		});
-	},
+	}
 
 	// Send the AJAX request with the search query
-	_executeSearch: function(type, input)
+	_executeSearch(type, input)
 	{
 		return $.ajax(
 			{
@@ -203,10 +202,10 @@ module.exports = withRouter(React.createClass({
 				},
 			}
 		);
-	},
+	}
 
 	// Process an array with search result from either groups or members and return a clean list
-	_processResult: function(type, data)
+	_processResult(type, data)
 	{
 		var list = [];
 		data.forEach(function(entity, index, array)
@@ -233,10 +232,10 @@ module.exports = withRouter(React.createClass({
 		});
 
 		return list;
-	},
+	}
 
 	// Called when the user is clicking an entity in the recipient list
-	gotoMember: function(value, event)
+	gotoMember(value, event)
 	{
 		if(value.data.type == "member")
 		{
@@ -248,10 +247,10 @@ module.exports = withRouter(React.createClass({
 		}
 
 		console.log(this.refs.recps);
-	},
+	}
 
 	// Render the page
-	render: function()
+	render()
 	{
 		return (
 			<form className="uk-form uk-form-horizontal">
@@ -260,7 +259,7 @@ module.exports = withRouter(React.createClass({
 						Typ
 					</label>
 					<div className="uk-form-controls">
-						<select id="message_type" ref="message_type" className="uk-form-width-medium" onChange={this.changeType}>
+						<select id="message_type" ref="message_type" className="uk-form-width-medium" onChange={this.changeType.bind(this)}>
 							<option value="email">E-post</option>
 							<option value="sms">SMS</option>
 						</select>
@@ -273,12 +272,12 @@ module.exports = withRouter(React.createClass({
 							Mottagare
 						</label>
 						<div className="uk-form-controls">
-							<Async ref="recps" multi cache={false} name="recipients" filterOption={this.filter} loadOptions={this.search} value={this.state.recipients} onChange={this.changeRecipient} onValueClick={this.gotoMember} />
+							<Async ref="recps" multi cache={false} name="recipients" filterOption={this.filter} loadOptions={this.search} value={this.state.recipients} onChange={this.changeRecipient.bind(this)} onValueClick={this.gotoMember.bind(this)} />
 						</div>
 					</div>
 				: ""}
 
-				{this.state.model.message_type == "email" ?
+				{this.state.model.attributes.message_type == "email" ?
 					<div className="uk-form-row">
 						<label className="uk-form-label" htmlFor="subject">
 							Ärende
@@ -286,7 +285,7 @@ module.exports = withRouter(React.createClass({
 						<div className="uk-form-controls">
 							<div className="uk-form-icon">
 								<i className="uk-icon-commenting"></i>
-								<input ref="subject" type="text" id="subject" name="subject" className="uk-form-width-large" onChange={this.changeSubject} value={this.state.model.subject} />
+								<input ref="subject" type="text" id="subject" name="subject" className="uk-form-width-large" onChange={this.changeSubject.bind(this)} value={this.state.model.subject} />
 							</div>
 						</div>
 					</div>
@@ -298,7 +297,7 @@ module.exports = withRouter(React.createClass({
 					</label>
 
 					<div className="uk-form-controls">
-						<textarea id="body" ref="body" className="uk-form-width-large" rows="8" onChange={this.changeBody} value={this.state.model.body} />
+						<textarea id="body" ref="body" className="uk-form-width-large" rows="8" onChange={this.changeBody.bind(this)} value={this.state.model.attributes.body} />
 					</div>
 				</div>
 
@@ -316,5 +315,5 @@ module.exports = withRouter(React.createClass({
 				</div>
 			</form>
 		);
-	},
-}));
+	}
+});

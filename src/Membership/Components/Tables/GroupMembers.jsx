@@ -1,36 +1,34 @@
 import React from 'react'
-import BackboneReact from 'backbone-react-component'
 import BackboneTable from '../../../BackboneTable'
-import { Link, withRouter } from 'react-router'
+import { Link, withRouter } from 'react-router-dom'
 import TableDropdownMenu from '../../../TableDropdownMenu'
 import auth from '../../../auth'
 
-module.exports = withRouter(React.createClass({
-	mixins: [Backbone.React.Component.mixin, BackboneTable],
-
-	getInitialState: function()
+module.exports = class GroupMembers extends BackboneTable
+{
+	constructor(props)
 	{
-		return {
-			columns: 3,
-		};
-	},
+		super(props);
 
-	componentWillMount: function()
+		this.state.columns = 3;
+	}
+
+	componentWillMount()
 	{
 		this.fetch();
-	},
+	}
 
-	removeTextMessage: function(group)
+	removeTextMessage(group)
 	{
 		return "Are you sure you want to remove group \"" + group.title + "\"?";
-	},
+	}
 
-	removeErrorMessage: function()
+	removeErrorMessage()
 	{
 		UIkit.notify("Error deleting group", {timeout: 0, status: "danger"});
-	},
+	}
 
-	removeUser: function(member_id)
+	removeUser(member_id)
 	{
 		var _this = this;
 
@@ -42,7 +40,7 @@ module.exports = withRouter(React.createClass({
 				"Authorization": "Bearer " + auth.getAccessToken()
 			},
 			data: JSON.stringify({
-				groups: [this.props.params.group_id],
+				groups: [this.props.match.params.group_id],
 			}),
 			contentType: "application/json; charset=utf-8",
 			dataType: "json",
@@ -50,9 +48,9 @@ module.exports = withRouter(React.createClass({
 			UIkit.notify("Medlem borttagen ur grupp", {status: "success"});
 			_this.fetch();
 		});
-	},
+	}
 
-	renderHeader: function()
+	renderHeader()
 	{
 		return [
 			{
@@ -65,9 +63,9 @@ module.exports = withRouter(React.createClass({
 				title: "",
 			},
 		];
-	},
+	}
 
-	renderRow: function(row, i)
+	renderRow(row, i)
 	{
 		return (
 			<tr key={i}>
@@ -80,5 +78,5 @@ module.exports = withRouter(React.createClass({
 				</td>
 			</tr>
 		);
-	},
-}));
+	}
+}

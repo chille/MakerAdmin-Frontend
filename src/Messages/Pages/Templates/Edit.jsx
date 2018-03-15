@@ -6,22 +6,25 @@ import TemplateModel from '../../Models/Template'
 import TemplateForm from '../../Components/Forms/Template'
 import { withRouter } from 'react-router'
 
-module.exports = withRouter(React.createClass({
-	getInitialState: function()
+module.exports = withRouter(class Meep extends React.Component
+{
+	constructor(props)
 	{
+		super(props);
+
 		var model = new TemplateModel({
-			template_id: this.props.params.id
+			template_id: this.props.match.params.id
 		});
 
 		var _this = this;
 		model.fetch();
 
-		return {
+		this.state = {
 			model: model,
 		};
-	},
+	}
 
-	render: function()
+	render()
 	{
 		return (
 			<div>
@@ -29,5 +32,5 @@ module.exports = withRouter(React.createClass({
 				<TemplateForm model={this.state.model} route={this.props.route} />
 			</div>
 		);
-	},
-}));
+	}
+});

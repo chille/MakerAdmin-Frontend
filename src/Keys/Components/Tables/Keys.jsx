@@ -1,40 +1,40 @@
 import React from 'react'
 import BackboneTable from '../../../BackboneTable'
 import TableDropdownMenu from '../../../TableDropdownMenu'
-import { Link, withRouter } from 'react-router'
+import { Link, withRouter } from 'react-router-dom'
 
-module.exports = withRouter(React.createClass({
-	mixins: [Backbone.React.Component.mixin, BackboneTable],
+module.exports = withRouter(class Keys extends BackboneTable
+{
 
-	getInitialState: function()
+	constructor(props)
 	{
-		return {
-			columns: 4,
-			linkPrefix: this.props.linkPrefix ? this.props.linkPrefix : "",
-		};
-	},
+		super(props);
 
-	componentWillMount: function()
+		this.state.columns = 4;
+		this.state.linkPrefix = this.props.linkPrefix || "";
+	}
+
+	componentWillMount()
 	{
 		this.fetch();
-	},
+	}
 
-	removeTextMessage: function(entity)
+	removeTextMessage(entity)
 	{
 		return "Are you sure you want to remove key \"" + entity.tagid + "\"?";
-	},
+	}
 
-	removeErrorMessage: function()
+	removeErrorMessage()
 	{
 		UIkit.modal.alert("Error deleting key");
-	},
+	}
 
-	onEdit: function(key)
+	onEdit(key)
 	{
-		this.props.router.push(this.state.linkPrefix + "/keys/" + key.get("key_id"));
-	},
+		this.props.history.push(this.state.linkPrefix + "/keys/" + key.get("key_id"));
+	}
 
-	renderHeader: function()
+	renderHeader()
 	{
 		return [
 			{
@@ -57,24 +57,24 @@ module.exports = withRouter(React.createClass({
 				title: "",
 			},
 		];
-	},
+	}
 
-	renderRow: function(row, i)
+	renderRow(row, i)
 	{
 		return (
 			<tr key={i}>
 				<td>
 					{(() => {
-						switch (row.status) {
+						switch (row.attributes.status) {
 							case "active":   return <span><i className="uk-icon-check key-active"></i> Aktiv</span>;
 							case "inactive": return <span><i className="uk-icon-close key-inactive"></i> Inaktiv</span>;
 							case "auto":     return <span><i className="uk-icon-cog key-auto"></i> Auto</span>;
 						}
 					})()}
 				</td>
-				<td><Link to={this.state.linkPrefix + "/keys/" + row.key_id}>{row.tagid}</Link></td>
-				<td><Link to={this.state.linkPrefix + "/keys/" + row.key_id}>{row.title}</Link></td>
-				<td><Link to={this.state.linkPrefix + "/keys/" + row.key_id}>{row.description}</Link></td>
+				<td><Link to={this.state.linkPrefix + "/keys/" + row.attributes.key_id}>{row.attributes.tagid}</Link></td>
+				<td><Link to={this.state.linkPrefix + "/keys/" + row.attributes.key_id}>{row.attributes.title}</Link></td>
+				<td><Link to={this.state.linkPrefix + "/keys/" + row.attributes.key_id}>{row.attributes.description}</Link></td>
 				<td>
 					<TableDropdownMenu>
 						{this.editButton(i)}
@@ -83,5 +83,5 @@ module.exports = withRouter(React.createClass({
 				</td>
 			</tr>
 		);
-	},
-}));
+	}
+});

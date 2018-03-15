@@ -5,9 +5,9 @@ import SubscriptionCollection from '../../../Collections/Subscription'
 
 import SubscriptionsUser from '../../../Components/Tables/SubscriptionsUser'
 
-module.exports = React.createClass(
+module.exports = class List extends React.Component
 {
-	render: function()
+	render()
 	{
 		return (
 			<SubscriptionsUser
@@ -15,12 +15,12 @@ module.exports = React.createClass(
 				dataSource={{
 					url: "/related",
 					params: {
-						param: "/membership/member/" + this.props.params.member_id,
+						param: "/membership/member/" + this.props.match.params.member_id,
 						matchUrl: "/sales/subscription/(.*)",
 						from: "sales/subscription",
 					}
 				}}
 			/>
 		);
-	},
-});
+	}
+}

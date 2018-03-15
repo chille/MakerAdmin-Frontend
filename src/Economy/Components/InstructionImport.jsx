@@ -1,17 +1,15 @@
 import React from 'react'
-import BackboneReact from 'backbone-react-component'
 
-import { Link, withRouter } from 'react-router'
+import { Link, withRouter } from 'react-router-dom'
 
-module.exports = withRouter(React.createClass({
-	mixins: [Backbone.React.Component.mixin],
-
-	render: function()
+module.exports = withRouter(class Meep extends React.Component
+{
+	render()
 	{
 		return (
 				<div>
 					<h3>Data från import</h3>
-					<Link to={"/economy/" + this.props.params.period + "/instruction/" + this.state.model.instruction_number}>Tillbaka till verifikation</Link>
+					<Link to={"/economy/" + this.props.match.params.period + "/instruction/" + this.state.model.attributes.instruction_number}>Tillbaka till verifikation</Link>
 					<form className="uk-form uk-form-horizontal">
 					<div className="uk-grid">
 						<div className="uk-width-1-2">
@@ -20,7 +18,7 @@ module.exports = withRouter(React.createClass({
 								<div className="uk-form-controls">
 									<div className="uk-form-icon">
 										<i className="uk-icon-institution"></i>
-										<input type="text" value={this.state.model.importer} disabled />
+										<input type="text" value={this.state.model.attributes.importer} disabled />
 									</div>
 								</div>
 							</div>
@@ -30,7 +28,7 @@ module.exports = withRouter(React.createClass({
 								<div className="uk-form-controls">
 									<div className="uk-form-icon">
 										<i className="uk-icon-database"></i>
-										<input type="text" value={this.state.model.external_id} disabled />
+										<input type="text" value={this.state.model.attributes.external_id} disabled />
 									</div>
 								</div>
 							</div>
@@ -40,7 +38,7 @@ module.exports = withRouter(React.createClass({
 								<div className="uk-form-controls">
 									<div className="uk-form-icon">
 										<i className="uk-icon-database"></i>
-										<input type="text" value={this.state.model.external_date} disabled />
+										<input type="text" value={this.state.model.attributes.external_date} disabled />
 									</div>
 								</div>
 							</div>
@@ -48,7 +46,7 @@ module.exports = withRouter(React.createClass({
 							<div className="uk-form-row">
 								<label className="uk-form-label">Data</label>
 								<div className="uk-form-controls">
-									<textarea value={this.state.model.external_data} />
+									<textarea value={this.state.model.attributes.external_data} />
 								</div>
 							</div>
 						</div>
@@ -56,5 +54,5 @@ module.exports = withRouter(React.createClass({
 					</form>
 				</div>
 		);
-	},
-}));
+	}
+});

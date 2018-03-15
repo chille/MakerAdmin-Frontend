@@ -1,69 +1,67 @@
 import React from 'react'
-import BackboneReact from 'backbone-react-component'
-import { Link, withRouter } from 'react-router'
+import { Link, withRouter } from 'react-router-dom'
 
-import CountryDropdown from '../../../CountryDropdown'
+import CountryDropdown from '../../../Components/Form/CountryDropdown'
 import DateTimeField from '../../../Components/DateTime'
 
-import GenericEntityFunctions from '../../../GenericEntityFunctions'
+import GenericEntityForm from '../../../Components/Form/GenericEntityForm'
 
 import Input from '../../../Components/Form/Input'
 
-module.exports = withRouter(React.createClass({
-	mixins: [Backbone.React.Component.mixin, GenericEntityFunctions],
-
-	removeTextMessage: function(member)
+module.exports = withRouter(class Member extends GenericEntityForm
+{
+	removeTextMessage(member)
 	{
 		return "Är du säker på att du vill ta bort medlemmen \"#" + member.member_number + " " + member.firstname + " " + member.lastname + "\"?";
-	},
+	}
 
-	onRemove: function(entity)
+	onRemove(entity)
 	{
 		UIkit.notify("Successfully deleted", {status: "success"});
-		this.props.router.push("/membership/members");
-	},
+		this.props.history.push("/membership/members");
+	}
 
-	onRemoveError: function()
+	onRemoveError()
 	{
 		UIkit.notify("Ett fel uppstod vid borttagning av medlem", {timeout: 0, status: "danger"});
-	},
+	}
 
-	onCreate: function(model)
+	onCreate(model)
 	{
 		UIkit.notify("Successfully created", {status: "success"});
-		this.props.router.push("/membership/members/" + model.get("member_id"));
-	},
+		this.props.history.push("/membership/members/" + model.get("member_id"));
+	}
 
-	onUpdate: function(model)
+	onUpdate(model)
 	{
 		UIkit.notify("Successfully updated", {status: "success"});
-	},
+	}
 
-	onSaveError: function()
+	onSaveError()
 	{
 		UIkit.notify("Error saving member", {timeout: 0, status: "danger"});
-	},
+	}
 
-	onCancel: function(entity)
+	onCancel(entity)
 	{
-		this.props.router.push("/membership/members");
-	},
+		this.props.history.push("/membership/members");
+	}
 
-	changeCountry: function(country)
+	changeCountry(country)
 	{
-		this.getModel().set({
+		this.model.set({
 			address_country: country
 		});
-	},
+	}
 
 	// Disable the send button if there is not enough data in the form
-	enableSendButton: function()
+	enableSendButton()
 	{
 		// Validate required fields
 		if(
-			this.getModel().isDirty() &&
-			this.state.model.firstname.length > 0 &&
-			this.state.model.email.length > 0
+			this.model.isDirty() &&
+			this.state.model.attributes.firstname.length > 0 &&
+			this.state.model.attributes.email.length > 0
 		)
 		{
 			// Enable button
@@ -72,9 +70,9 @@ module.exports = withRouter(React.createClass({
 
 		// Disable button
 		return false;
-	},
+	}
 
-	render: function()
+	render()
 	{
 		return (
 			<div className="meep">
@@ -82,30 +80,30 @@ module.exports = withRouter(React.createClass({
 					<fieldset >
 						<legend><i className="uk-icon-user"></i> Personuppgifter</legend>
 
-						<Input model={this.getModel()} name="civicregno" title="Personnummer" />
-						<Input model={this.getModel()} name="firstname"  title="Förnamn" />
-						<Input model={this.getModel()} name="lastname"   title="Efternamn" />
-						<Input model={this.getModel()} name="email"      title="E-post" />
-						<Input model={this.getModel()} name="phone"      title="Telefonnummer" />
+						<Input model={this.model} name="civicregno" title="Personnummer" />
+						<Input model={this.model} name="firstname"  title="Förnamn" />
+						<Input model={this.model} name="lastname"   title="Efternamn" />
+						<Input model={this.model} name="email"      title="E-post" />
+						<Input model={this.model} name="phone"      title="Telefonnummer" />
 					</fieldset>
 
 					<fieldset data-uk-margin>
 						<legend><i className="uk-icon-home"></i> Adress</legend>
 
-						<Input model={this.getModel()} name="address_street"  title="Address" />
-						<Input model={this.getModel()} name="address_extra"   title="Address extra" placeholder="Extra adressrad, t ex C/O adress" />
-						<Input model={this.getModel()} name="address_zipcode" title="Postnummer" />
-						<Input model={this.getModel()} name="address_city"    title="Postort" />
+						<Input model={this.model} name="address_street"  title="Address" />
+						<Input model={this.model} name="address_extra"   title="Address extra" placeholder="Extra adressrad, t ex C/O adress" />
+						<Input model={this.model} name="address_zipcode" title="Postnummer" />
+						<Input model={this.model} name="address_city"    title="Postort" />
 
 						<div className="uk-form-row">
 							<label htmlFor="" className="uk-form-label">Land</label>
 							<div className="uk-form-controls">
-								<CountryDropdown country={this.state.model.address_country} onChange={this.changeCountry} />
+								<CountryDropdown country={this.state.model.attributes.address_country} onChange={this.changeCountry.bind(this)} />
 							</div>
 						</div>
 					</fieldset>
 
-					{this.state.model.member_id > 0 ?
+					{this.state.model.attributes.member_id > 0 ?
 						<fieldset data-uk-margin>
 							<legend><i className="uk-icon-tag"></i> Metadata</legend>
 
@@ -114,7 +112,7 @@ module.exports = withRouter(React.createClass({
 								<div className="uk-form-controls">
 									<i className="uk-icon-calendar"></i>
 									&nbsp;
-									<DateTimeField date={this.state.model.created_at} />
+									<DateTimeField date={this.state.model.attributes.created_at} />
 								</div>
 							</div>
 
@@ -123,7 +121,7 @@ module.exports = withRouter(React.createClass({
 								<div className="uk-form-controls">
 									<i className="uk-icon-calendar"></i>
 									&nbsp;
-									<DateTimeField date={this.state.model.updated_at} />
+									<DateTimeField date={this.state.model.attributes.updated_at} />
 								</div>
 							</div>
 						</fieldset>
@@ -137,5 +135,5 @@ module.exports = withRouter(React.createClass({
 				</form>
 			</div>
 		);
-	},
-}));
+	}
+});

@@ -1,26 +1,24 @@
 import React from 'react'
-import BackboneReact from 'backbone-react-component'
-import { Link } from 'react-router'
+import { Link } from 'react-router-dom'
 
 // Backbone
 import BackboneTable from '../../../BackboneTable'
 
-module.exports = React.createClass({
-	mixins: [Backbone.React.Component.mixin, BackboneTable],
-
-	getInitialState: function()
+module.exports = class TictailRelations extends BackboneTable
+{
+	constructor(props)
 	{
-		return {
-			columns: 4,
-		};
-	},
+		super(props);
 
-	componentWillMount: function()
+		this.state.columns = 4;
+	}
+
+	componentWillMount()
 	{
 		this.fetch();
-	},
+	}
 
-	renderHeader: function ()
+	renderHeader ()
 	{
 		return [
 			{
@@ -36,9 +34,9 @@ module.exports = React.createClass({
 				title: "Verifikation",
 			},
 		];
-	},
+	}
 
-	renderRow: function (row, i)
+	renderRow(row, i)
 	{
 		/*
 		Modes:
@@ -90,5 +88,5 @@ module.exports = React.createClass({
 				</td>
 			</tr>
 		);
-	},
-});
+	}
+}

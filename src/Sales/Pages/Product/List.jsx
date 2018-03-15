@@ -4,10 +4,11 @@ import React from 'react'
 import ProductCollection from '../../Collections/Product'
 
 import Products from '../../Components/Tables/Products'
-import { Link } from 'react-router'
+import { Link } from 'react-router-dom'
 
-module.exports = React.createClass({
-	render: function()
+module.exports = class Meep extends React.Component
+{
+	render()
 	{
 		return (
 			<div>
@@ -19,5 +20,5 @@ module.exports = React.createClass({
 				<Products type={ProductCollection} />
 			</div>
 		);
-	},
-});
+	}
+}

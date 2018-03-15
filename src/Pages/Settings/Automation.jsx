@@ -1,7 +1,8 @@
 import React from 'react'
 
-module.exports = React.createClass({
-	render: function()
+module.exports = class Automation extends React.Component
+{
+	render()
 	{
 		return (
 			<div>
@@ -42,5 +43,5 @@ module.exports = React.createClass({
 				</ul>
 			</div>
 		);
-	},
-});
+	}
+}

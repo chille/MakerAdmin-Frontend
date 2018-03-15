@@ -5,17 +5,20 @@ import KeysCollection from '../Collections/Keys'
 
 import Keys from '../Components/Tables/Keys'
 import TableFilterBox from '../../TableFilterBox'
-import { Link } from 'react-router'
+import { Link } from 'react-router-dom'
 
-module.exports = React.createClass({
-	getInitialState: function()
+module.exports = class List extends React.Component
+{
+	constructor()
 	{
-		return {
+		super();
+
+		this.state = {
 			filters: {},
 		};
-	},
+	}
 
-	overrideFiltersFromProps: function(filters)
+	overrideFiltersFromProps(filters)
 	{
 		console.log("overrideFiltersFromProps");
 
@@ -35,17 +38,17 @@ module.exports = React.createClass({
 		}
 
 		return filters;
-	},
+	}
 
-	updateFilters: function(newFilter)
+	updateFilters(newFilter)
 	{
 		var filters = this.overrideFiltersFromProps(newFilter);
 		this.setState({
 			filters: filters
 		});
-	},
+	}
 
-	componentWillReceiveProps: function(nextProps)
+	componentWillReceiveProps(nextProps)
 	{
 		console.log("componentWillReceiveProps");
 		if(nextProps.member_number != this.props.member_number)
@@ -62,9 +65,9 @@ module.exports = React.createClass({
 		{
 			console.log("TODO: Turn off filter on member number");
 		}
-	},
+	}
 
-	render: function()
+	render()
 	{
 		return (
 			<div>
@@ -73,13 +76,13 @@ module.exports = React.createClass({
 				<p className="uk-float-left">Visa lista över samtliga nycklas i systemet</p>
 				<Link to="/keys/add" className="uk-button uk-button-primary uk-float-right"><i className="uk-icon-plus-circle"></i> Lägg till nyckel</Link>
 
-				<TableFilterBox onChange={this.updateFilters} />
+				<TableFilterBox onChange={this.updateFilters.bind(this)} />
 				<Keys
 					type={KeysCollection}
 					filters={this.state.filters}
 				/>
 			</div>
 		);
-	},
-});
+	}
+}
 //KeysOverviewHandler.title = "Nycklar";

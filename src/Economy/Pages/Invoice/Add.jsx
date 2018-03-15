@@ -5,15 +5,18 @@ import InvoiceModel from '../../Models/Invoice'
 
 import Invoice from '../../Components/Forms/Invoice'
 
-module.exports = React.createClass({
-	getInitialState: function()
+module.exports = class Meep extends React.Component
+{
+	constructor()
 	{
-		return {
+		super();
+
+		this.state = {
 			model: new InvoiceModel()
 		};
-	},
+	}
 
-	render: function()
+	render()
 	{
 		return (
 			<div>
@@ -21,5 +24,5 @@ module.exports = React.createClass({
 				<Invoice model={this.state.model} />
 			</div>
 		);
-	},
-});
+	}
+}

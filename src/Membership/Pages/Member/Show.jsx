@@ -1,14 +1,17 @@
 import React from 'react'
-import { Link, withRouter } from 'react-router'
+import { Link, withRouter } from 'react-router-dom'
 
 // Backbone
 import MemberModel from '../../Models/Member'
 
-module.exports = withRouter(React.createClass({
-	getInitialState: function()
+module.exports = class Show extends React.Component
+{
+	constructor(props)
 	{
+		super(props);
+
 		var member = new MemberModel({
-			member_id: this.props.params.member_id
+			member_id: this.props.match.params.member_id
 		});
 
 		var _this = this;
@@ -18,14 +21,15 @@ module.exports = withRouter(React.createClass({
 			_this.forceUpdate();
 		}});
 
-		return {
+		this.state = {
 			model: member,
 		};
-	},
+	}
 
-	render: function()
+	render()
 	{
-		var member_id = this.props.params.member_id;
+		var member_id = this.props.match.params.member_id;
+
 		return (
 			<div>
 				<h2>Medlem #{this.state.model.get("member_number")}: {this.state.model.get("firstname")} {this.state.model.get("lastname")}</h2>
@@ -42,6 +46,6 @@ module.exports = withRouter(React.createClass({
 				{this.props.children}
 			</div>
 		);
-	},
-}));
+	}
+}
 //MemberHandler.title = "Visa medlem";

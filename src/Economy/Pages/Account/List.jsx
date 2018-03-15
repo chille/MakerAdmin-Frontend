@@ -3,12 +3,13 @@ import React from 'react'
 // Backbone
 import AccountCollection from '../../Collections/Account'
 
-import { Link, withRouter } from 'react-router'
+import { Link, withRouter } from 'react-router-dom'
 
 import EconomyAccounts from '../../Components/Tables/Accounts'
 
-module.exports = withRouter(React.createClass({
-	render: function()
+module.exports = withRouter(class Meep extends React.Component
+{
+	render()
 	{
 		return (
 			<div>
@@ -20,10 +21,10 @@ module.exports = withRouter(React.createClass({
 				<EconomyAccounts
 					type={AccountCollection}
 					dataSource={{
-						url: "/economy/" + this.props.params.period + "/account"
+						url: "/economy/" + this.props.match.params.period + "/account"
 					}}
 				/>
 			</div>
 		);
-	},
-}));
+	}
+});

@@ -1,20 +1,18 @@
 import React from 'react'
-import BackboneReact from 'backbone-react-component'
 
-import { Link } from 'react-router'
+import { Link } from 'react-router-dom'
 import BackboneTable from '../../../BackboneTable'
 import DateField from '../../../Components/Date'
 import TableDropdownMenu from '../../../TableDropdownMenu'
 
-module.exports = React.createClass({
-	mixins: [Backbone.React.Component.mixin, BackboneTable],
-
-	getInitialState: function()
+module.exports = class Members extends BackboneTable
+{
+	constructor(props)
 	{
-		return {
-			columns: 7,
-		};
-	},
+		super(props);
+
+		this.state.columns = 7;
+	}
 
 /*
 	// TODO: Få igång denna igen
@@ -33,42 +31,42 @@ module.exports = React.createClass({
 		}
 	},
 */
-	componentWillMount: function()
+	componentWillMount()
 	{
 		this.fetch();
-	},
+	}
 
-	removeTextMessage: function(member)
+	removeTextMessage(member)
 	{
 		return "Are you sure you want to remove member \"" + member.firstname + " " + member.lastname + "\"?";
-	},
+	}
 
-	removeErrorMessage: function()
+	removeErrorMessage()
 	{
 		UIkit.notify("Ett fel uppstod vid borttagning av medlem", {timeout: 0, status: "danger"});
-	},
+	}
 
-	renderRow: function(row, i)
+	renderRow(row, i)
 	{
 		return (
 			<tr key={i}>
-				<td><Link to={"/membership/members/" + row.member_id}>{row.member_number}</Link></td>
+				<td><Link to={"/membership/members/" + row.attributes.member_id}>{row.attributes.member_number}</Link></td>
 				<td>-</td>
-				<td>{row.firstname}</td>
-				<td>{row.lastname}</td>
-				<td>{row.email}</td>
-				<td><DateField date={row.created_at} /></td>
+				<td>{row.attributes.firstname}</td>
+				<td>{row.attributes.lastname}</td>
+				<td>{row.attributes.email}</td>
+				<td><DateField date={row.attributes.created_at} /></td>
 				<td>
 					<TableDropdownMenu>
-						<Link to={"/membership/members/" + row.member_id}><i className="uk-icon-cog"></i> Redigera medlem</Link>
+						<Link to={"/membership/members/" + row.attributes.member_id}><i className="uk-icon-cog"></i> Redigera medlem</Link>
 						{this.removeButton(i, "Ta bort medlem")}
 					</TableDropdownMenu>
 				</td>
 			</tr>
 		);
-	},
+	}
 
-	renderHeader: function()
+	renderHeader()
 	{
 		return [
 			{
@@ -98,5 +96,5 @@ module.exports = React.createClass({
 				title: "",
 			},
 		];
-	},
-});
+	}
+}

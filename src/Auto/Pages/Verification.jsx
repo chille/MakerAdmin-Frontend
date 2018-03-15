@@ -4,8 +4,9 @@ import TictailRelationsTable from '../Components/Tables/TictailRelations'
 // Backbone
 import TictailRelationsCollection from '../Collections/TictailRelations'
 
-module.exports = React.createClass({
-	render: function()
+module.exports = class Verification extends React.Component
+{
+	render()
 	{
 		return (
 			<div>
@@ -14,5 +15,5 @@ module.exports = React.createClass({
 				<TictailRelationsTable type={TictailRelationsCollection} />
 			</div>
 		);
-	},
-});
+	}
+}

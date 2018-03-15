@@ -1,30 +1,30 @@
 import React from 'react'
 import { Async } from 'react-select';
-import { Link, withRouter } from 'react-router'
+import { Link, withRouter } from 'react-router-dom'
 import auth from '../../../../auth'
 
-module.exports = withRouter(React.createClass(
+module.exports = class Add extends React.Component
 {
-	getInitialState: function()
+	constructor()
 	{
-		return {
+		this.state = {
 			addGroups: "",
 			disableSend: true,
 		};
-	},
+	}
 
-	add: function()
+	add()
 	{
-	},
+	}
 
-	cancel: function()
+	cancel()
 	{
 		this.setState({
 			addGroups: "",
 		});
-	},
+	}
 
-	changeValue: function(value)
+	changeValue(value)
 	{
 		this.setState({
 			addGroups: value
@@ -35,15 +35,15 @@ module.exports = withRouter(React.createClass(
 
 		// Clear the search history so there is no drop down with old data after adding a recipient
 		this.refs.addgroups.setState({options: []});
-	},
+	}
 
 	// Disable client side filtering
-	filter: function(option, filterString)
+	filter(option, filterString)
 	{
 		return option;
-	},
+	}
 
-	search: function(input, callback)
+	search(input, callback)
 	{
 		// Clear the search history so there is no drop down with old data when search text input is empty
 		if(!input)
@@ -77,10 +77,10 @@ module.exports = withRouter(React.createClass(
 			}, 100);
 
 		});
-	},
+	}
 
 	// Send an API request and queue the message to be sent
-	save: function(event)
+	save(event)
 	{
 		var _this = this;
 
@@ -96,7 +96,7 @@ module.exports = withRouter(React.createClass(
 		// Send API request
 		$.ajax({
 			method: "POST",
-			url: config.apiBasePath + "/membership/member/" + this.props.params.member_id + "/groups/add",
+			url: config.apiBasePath + "/membership/member/" + this.props.match.params.member_id + "/groups/add",
 			headers: {
 				"Authorization": "Bearer " + auth.getAccessToken()
 			},
@@ -106,16 +106,16 @@ module.exports = withRouter(React.createClass(
 			contentType: "application/json; charset=utf-8",
 			dataType: "json",
 		}).done(function () {
-			_this.props.router.push("/membership/members/" + _this.props.params.member_id + "/groups");
+			_this.props.history.push("/membership/members/" + _this.props.match.params.member_id + "/groups");
 		});
-	},
+	}
 
-	gotoGroup: function(value, event)
+	gotoGroup(value, event)
 	{
 		UIkit.modal.alert("TODO: Show info for group " + value.label);
-	},
+	}
 
-	render: function()
+	render()
 	{
 		return (
 			<div>
@@ -131,12 +131,12 @@ module.exports = withRouter(React.createClass(
 
 					<div className="uk-form-row">
 						<div className="uk-form-controls">
-							<Link to={"/membership/members/" + this.props.params.member_id + "/groups"} className="uk-float-left uk-button uk-button-danger"><i className="uk-icon-close" /> Avbryt</Link>
+							<Link to={"/membership/members/" + this.props.match.params.member_id + "/groups"} className="uk-float-left uk-button uk-button-danger"><i className="uk-icon-close" /> Avbryt</Link>
 							<button type="submit" disabled={this.state.disableSend} className="uk-float-right uk-button uk-button-success"><i className="uk-icon-save" /> Spara</button>
 						</div>
 					</div>
 				</form>
 			</div>
 		);
-	},
-}));
+	}
+}

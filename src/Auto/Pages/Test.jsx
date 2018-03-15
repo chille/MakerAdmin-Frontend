@@ -1,12 +1,8 @@
 import React from 'react'
-import { Link } from 'react-router'
-//import OverviewTable from '../Components/Tables/Overview'
 
-// Backbone
-//import OverviewCollection from '../Collections/Overview'
-
-module.exports = React.createClass({
-	render: function()
+module.exports = class Test extends React.Component
+{
+	render()
 	{
 		return (
 			<div>
@@ -60,5 +56,5 @@ module.exports = React.createClass({
 				</div>
 			</div>
 		);
-	},
-});
+	}
+}

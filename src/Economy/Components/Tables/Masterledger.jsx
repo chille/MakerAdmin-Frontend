@@ -1,24 +1,23 @@
 import React from 'react'
 import BackboneTable from '../../../BackboneTable'
-import { Link, withRouter } from 'react-router'
+import { Link, withRouter } from 'react-router-dom'
 import Currency from '../../../Components/Currency'
 
-module.exports = withRouter(React.createClass({
-	mixins: [Backbone.React.Component.mixin, BackboneTable],
-
-	getInitialState: function()
+module.exports = withRouter(class MasterLedger extends BackboneTable
+{
+	constructor(props)
 	{
-		return {
-			columns: 3,
-		};
-	},
+		super(props);
 
-	componentWillMount: function()
+		this.state.columns = 3;
+	}
+
+	componentWillMount()
 	{
 		this.fetch();
-	},
+	}
 
-	renderHeader: function()
+	renderHeader()
 	{
 		return [
 			{
@@ -34,16 +33,16 @@ module.exports = withRouter(React.createClass({
 				class: "uk-text-right",
 			},
 		];
-	},
+	}
 
-	renderRow: function(row, i)
+	renderRow(row, i)
 	{
 		return (
 			<tr key={i}>
-				<td><Link to={"/economy/" + this.props.params.period + "/account/" + row.account_number}>{row.account_number}</Link></td>
-				<td>{row.title}</td>
-				<td className="uk-text-right"><Currency value={row.balance} /></td>
+				<td><Link to={"/economy/" + this.props.match.params.period + "/account/" + row.attributes.account_number}>{row.attributes.account_number}</Link></td>
+				<td>{row.attributes.title}</td>
+				<td className="uk-text-right"><Currency value={row.attributes.balance} /></td>
 			</tr>
 		);
-	},
-}));
+	}
+});

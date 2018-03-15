@@ -6,15 +6,18 @@ import KeyModel from '../Models/Key'
 import Key from '../Components/Forms/Key'
 import { withRouter } from 'react-router'
 
-module.exports = withRouter(React.createClass({
-	getInitialState: function()
+module.exports = withRouter(class Add extends React.Component
+{
+	constructor()
 	{
-		return {
+		super();
+
+		this.state =  {
 			model: new KeyModel,
 		};
-	},
+	}
 
-	render: function()
+	render()
 	{
 		return (
 			<div>
@@ -22,6 +25,6 @@ module.exports = withRouter(React.createClass({
 				<Key model={this.state.model} route={this.props.route} />
 			</div>
 		);
-	},
-}));
+	}
+});
 //KeysOverviewHandler.title = "Nycklar";

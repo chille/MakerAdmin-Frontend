@@ -1,7 +1,8 @@
 import React from 'react'
 
-module.exports = React.createClass({
-	render: function()
+module.exports = class Currency extends React.Component
+{
+	render()
 	{
 		var formatter = new Intl.NumberFormat('sv-SE', {
 			/*
@@ -14,5 +15,5 @@ module.exports = React.createClass({
 
 		var value = formatter.format(this.props.value / 100);
 		return (<span>{value} {this.props.currency}</span>);
-	},
-});
+	}
+}

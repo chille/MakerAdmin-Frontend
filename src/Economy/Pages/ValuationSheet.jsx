@@ -1,28 +1,29 @@
 import React from 'react'
-import BackboneReact from 'backbone-react-component'
 import auth from '../../auth'
 
 // Backbone
 import MasterledgerCollection from '../Collections/Masterledger'
 
-import { Link, withRouter } from 'react-router'
+import { Link, withRouter } from 'react-router-dom'
 import Currency from '../../Components/Currency'
 import DateField from '../../Components/Date'
-import BackboneTable from '../../BackboneTable'
 
-module.exports = withRouter(React.createClass({
-	getInitialState: function()
+module.exports = withRouter(class Meep extends React.Component
+{
+	constructor()
 	{
-		return {
+		super();
+
+		this.state = {
 			data: [],
 			fetched_data: false
 		};
-	},
+	}
 
-	componentDidMount: function()
+	componentDidMount()
 	{
 		$.ajax({
-			url: config.apiBasePath + "/economy/" + this.props.params.period + "/valuationsheet",
+			url: config.apiBasePath + "/economy/" + this.props.match.params.period + "/valuationsheet",
 			dataType: 'json',
 			cache: false,
 			headers: {
@@ -36,9 +37,9 @@ module.exports = withRouter(React.createClass({
 				console.error(this.props.url, status, err.toString());
 			}.bind(this)
 		});
-	},
+	}
 
-	renderRecursive: function (data, depth = 1)
+	renderRecursive(data, depth = 1)
 	{
 		var _this = this;
 		return data.map(
@@ -73,7 +74,7 @@ module.exports = withRouter(React.createClass({
 													<td colSpan={depth+1}>
 														&nbsp;
 													</td>
-													<td colSpan={4-depth}><Link to={"/economy/" + _this.props.params.period + "/account/" + row.account_number}>{row.account_number} {row.title}</Link></td>
+													<td colSpan={4-depth}><Link to={"/economy/" + _this.props.match.params.period + "/account/" + row.account_number}>{row.account_number} {row.title}</Link></td>
 													<td className="uk-text-right"><Currency value={row.balance_in} /></td>
 													<td className="uk-text-right"><Currency value={row.balance_period} /></td>
 													<td className="uk-text-right"><Currency value={row.balance_out} /></td>
@@ -113,9 +114,9 @@ module.exports = withRouter(React.createClass({
 				);
 			}
 		);
-	},
+	}
 
-	render: function ()
+	render()
 	{
 		if(this.state.fetched_data === false)
 		{
@@ -158,6 +159,5 @@ module.exports = withRouter(React.createClass({
 				</div>
 			);
 		}
-
 	}
-}));
+});

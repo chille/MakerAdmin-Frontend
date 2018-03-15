@@ -2,26 +2,21 @@ import React from 'react'
 import Multiaccess from '../Components/Multiaccess'
 import File from '../../Components/Form/File'
 
-module.exports = React.createClass({
-	getInitialState: function()
-	{
-		return {
-		};
-	},
-
-	componentDidMount: function()
+module.exports = class MultiAccess extends React.Component
+{
+	componentDidMount()
 	{
 		this.setState({
 			filename: ""
 		});
-	},
+	}
 
-	uploadComplete: function(filename)
+	uploadComplete(filename)
 	{
 		this.setState({filename});
-	},
+	}
 
-	render: function()
+	render()
 	{
 		return (
 			<div>
@@ -32,5 +27,5 @@ module.exports = React.createClass({
 				<Multiaccess filename={this.state.filename} />
 			</div>
 		);
-	},
-});
+	}
+}

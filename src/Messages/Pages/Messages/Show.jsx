@@ -4,25 +4,28 @@ import React from 'react'
 import MessageModel from '../../Models/Message'
 import RecipientsCollection from '../../Collections/Recipients'
 
-//import { Link } from 'react-router'
+//import { Link } from 'react-router-dom'
 import RecipientsTable from '../../Components/Tables/Recipients'
 import Message from '../../Components/Message'
 
-module.exports = React.createClass({
-	getInitialState: function()
+module.exports = class Meep extends React.Component
+{
+	constructor(props)
 	{
+		super(props);
+
 		// Load message model
 		var message = new MessageModel({
-			message_id: this.props.params.id
+			message_id: this.props.match.params.id
 		});
 		message.fetch();
 
-		return {
+		this.state = {
 			message_model: message,
 		};
-	},
+	}
 
-	render: function()
+	render()
 	{
 		return (
 			<div>
@@ -32,11 +35,11 @@ module.exports = React.createClass({
 				<RecipientsTable
 					type={RecipientsCollection}
 					dataSource={{
-						url: "/messages/" + this.props.params.id + "/recipients",
+						url: "/messages/" + this.props.match.params.id + "/recipients",
 					}}
 				/>
 			</div>
 		);
-	},
-});
+	}
+}
 //Recipients.title = "";

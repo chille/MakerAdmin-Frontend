@@ -3,11 +3,12 @@ import React from 'react'
 // Backbone
 import TemplatesCollection from '../../Collections/Templates'
 
-import { Link } from 'react-router'
+import { Link } from 'react-router-dom'
 import Templates from '../../Components/Tables/Templates'
 
-module.exports = React.createClass({
-	render: function()
+module.exports = class Meep extends React.Component
+{
+	render()
 	{
 		return (
 			<div>
@@ -21,5 +22,5 @@ module.exports = React.createClass({
 				<Templates type={TemplatesCollection} />
 			</div>
 		);
-	},
-});
+	}
+}

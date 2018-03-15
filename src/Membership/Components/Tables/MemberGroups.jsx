@@ -1,43 +1,41 @@
 import React from 'react'
-import BackboneReact from 'backbone-react-component'
 import BackboneTable from '../../../BackboneTable'
-import { Link, withRouter } from 'react-router'
+import { Link, withRouter } from 'react-router-dom'
 import TableDropdownMenu from '../../../TableDropdownMenu'
 import auth from '../../../auth'
 
-module.exports = withRouter(React.createClass({
-	mixins: [Backbone.React.Component.mixin, BackboneTable],
-
-	getInitialState: function()
+module.exports = class MemberGroups extends BackboneTable
+{
+	constructor(props)
 	{
-		return {
-			columns: 9,
-		};
-	},
+		super(props);
 
-	componentWillMount: function()
+		this.state.columns = 9;
+	}
+
+	componentWillMount()
 	{
 		this.fetch();
-	},
+	}
 
-	removeTextMessage: function(group)
+	removeTextMessage(group)
 	{
 		return "Are you sure you want to remove group \"" + group.title + "\"?";
-	},
+	}
 
-	removeErrorMessage: function()
+	removeErrorMessage()
 	{
 		UIkit.notify("Error deleting group", {timeout: 0, status: "danger"});
-	},
+	}
 
-	removeUser: function(group_id)
+	removeUser(group_id)
 	{
 		var _this = this;
 
 		// Send API request
 		$.ajax({
 			method: "POST",
-			url: config.apiBasePath + "/membership/member/" + this.props.params.member_id + "/groups/remove",
+			url: config.apiBasePath + "/membership/member/" + this.props.match.params.member_id + "/groups/remove",
 			headers: {
 				"Authorization": "Bearer " + auth.getAccessToken()
 			},
@@ -50,9 +48,9 @@ module.exports = withRouter(React.createClass({
 			UIkit.notify("Medlem borttagen ur grupp", {status: "success"});
 			_this.fetch();
 		});
-	},
+	}
 
-	renderHeader: function()
+	renderHeader()
 	{
 		return [
 			{
@@ -67,9 +65,9 @@ module.exports = withRouter(React.createClass({
 				title: "",
 			},
 		];
-	},
+	}
 
-	renderRow: function(row, i)
+	renderRow(row, i)
 	{
 		return (
 			<tr key={i}>
@@ -83,5 +81,5 @@ module.exports = withRouter(React.createClass({
 				</td>
 			</tr>
 		);
-	},
-}));
+	}
+}

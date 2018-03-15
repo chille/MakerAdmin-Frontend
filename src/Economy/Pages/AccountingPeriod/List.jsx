@@ -5,10 +5,11 @@ import AccountingPeriodsCollection from '../../Collections/AccountingPeriods'
 
 import EconomyAccountingPeriods from '../../Components/Tables/AccountingPeriods'
 
-import { Link, withRouter } from 'react-router'
+import { Link, withRouter } from 'react-router-dom'
 
-module.exports = withRouter(React.createClass({
-	render: function()
+module.exports = withRouter(class Meep extends React.Component
+{
+	render()
 	{
 		return (
 			<div>
@@ -21,5 +22,5 @@ module.exports = withRouter(React.createClass({
 				/>
 			</div>
 		);
-	},
-}));
+	}
+});

@@ -1,8 +1,11 @@
 import React from 'react'
 
-module.exports = React.createClass({
-	getInitialState: function()
+module.exports = class CountryDropdown extends React.Component
+{
+	constructor()
 	{
+		super();
+
 		this.continents = [
 			{
 				name: "Africa",
@@ -1044,12 +1047,12 @@ module.exports = React.createClass({
 			},
 		];
 
-		return {
+		this.state = {
 			country: this.props.country,
 		};
-	},
+	}
 
-	render: function()
+	render()
 	{
 		var _this = this;
 		var countries = [];
@@ -1064,7 +1067,7 @@ module.exports = React.createClass({
 
 			continent.countries.forEach(function(country, index, array)
 			{
-				var elm = (<li key={country.code}><a onClick={_this.selectCountry} data-country={country.code} className="uk-dropdown-close"><span className={"flag flag-" + country.code}></span> {country.name}</a></li>);
+				var elm = (<li key={country.code}><a onClick={_this.selectCountry.bind(_this)} data-country={country.code} className="uk-dropdown-close"><span className={"flag flag-" + country.code}></span> {country.name}</a></li>);
 				countries.push(elm);
 			});
 		});
@@ -1079,22 +1082,22 @@ module.exports = React.createClass({
 				</div>
 			</div>
 		);
-	},
+	}
 
 	// Update the country when the props are changed
-	componentWillReceiveProps: function(nextProps)
+	componentWillReceiveProps(nextProps)
 	{
 		this.setState({country: nextProps.country.toLowerCase()});
-	},
+	}
 
 	// Send changes back to parent
-	selectCountry: function(event)
+	selectCountry(event)
 	{
 		this.props.onChange(event.target.dataset.country);
-	},
+	}
 
 	// Get a readable name from a country code
-	getCountryName: function(code)
+	getCountryName(code)
 	{
 		var name = "Unknown";
 
@@ -1116,5 +1119,5 @@ module.exports = React.createClass({
 		});
 
 		return name;
-	},
-});
+	}
+}

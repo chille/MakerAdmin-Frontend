@@ -1,13 +1,15 @@
 import React from 'react'
 
-module.exports = React.createClass({
-	getInitialState: function()
+module.exports = class TableFilterBox extends React.Component
+{
+	constructor()
 	{
-		this.filters = {};
-		return {};
-	},
+		super();
 
-	buildNewFilterObject: function()
+		this.filters = {};
+	}
+
+	buildNewFilterObject()
 	{
 		var newFilter = {};
 
@@ -29,18 +31,18 @@ module.exports = React.createClass({
 		console.log(newFilter);
 
 		this.props.onChange(newFilter);
-	},
+	}
 
-	changeFilterValue: function(event)
+	changeFilterValue(event)
 	{
 		var target = event.target;
 		var key = target.getAttribute("name");
 		this.filters[key] = target.value;
 
 		this.buildNewFilterObject();
-	},
+	}
 
-	render: function()
+	render()
 	{
 		return (
 			<div className="filterbox">
@@ -49,7 +51,7 @@ module.exports = React.createClass({
 						<form className="uk-form">
 							<div className="uk-form-icon">
 								<i className="uk-icon-search"></i>
-								<input ref="search" type="text" className="uk-form-width-large" placeholder="Skriv in ett sökord" onChange={this.buildNewFilterObject} />
+								<input ref="search" type="text" className="uk-form-width-large" placeholder="Skriv in ett sökord" onChange={this.buildNewFilterObject.bind(this)} />
 							</div>
 						</form>
 					</div>
@@ -65,7 +67,7 @@ module.exports = React.createClass({
 						Aktiv:
 					</label>
 
-					<select ref="filter_active" id="filter_active" name="filter_active" onChange={this.changeFilterValue}>
+					<select ref="filter_active" id="filter_active" name="filter_active" onChange={this.changeFilterValue.bind(this)}>
 						<option value="yes">Ja</option>
 						<option value="no">Nej</option>
 						<option value="auto">Auto</option>
@@ -75,5 +77,5 @@ module.exports = React.createClass({
 				</div>
 			</div>
 		);
-	},
-});
+	}
+}

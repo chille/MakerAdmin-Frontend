@@ -1,7 +1,9 @@
 import React from 'react'
 
-module.exports = React.createClass({
-	render: function () {
+module.exports = class Overview extends React.Component
+{
+	render()
+	{
 		return (
 			<div className="uk-width-1-1">
 				<h2>Statistik</h2>
@@ -21,4 +23,4 @@ module.exports = React.createClass({
 			</div>
 		);
 	}
-});
+}

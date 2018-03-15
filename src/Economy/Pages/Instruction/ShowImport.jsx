@@ -5,22 +5,25 @@ import InstructionModel from '../../Models/Instruction'
 
 import EconomyAccountingInstructionImport from '../../Components/InstructionImport'
 
-module.exports = React.createClass({
-	getInitialState: function()
+module.exports = class Meep extends React.Component
+{
+	constructor(props)
 	{
+		super(props);
+
 		var instruction = new InstructionModel({
-			period: this.props.params.period,
-			instruction_number: this.props.params.instruction_number
+			period: this.props.match.params.period,
+			instruction_number: this.props.match.params.instruction_number
 		});
 		instruction.fetch();
 
-		return {
+		this.state = {
 			model: instruction
 		};
-	},
+	}
 
-	render: function()
+	render()
 	{
 		return <EconomyAccountingInstructionImport model={this.state.model} />
 	}
-});
+}

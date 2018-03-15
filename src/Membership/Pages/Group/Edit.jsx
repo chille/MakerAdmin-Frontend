@@ -6,19 +6,22 @@ import GroupModel from '../../Models/Group'
 import Group from '../../Components/Forms/Group'
 import { withRouter } from 'react-router'
 
-module.exports = withRouter(React.createClass({
-	getInitialState: function()
+module.exports = withRouter(class Edit extends React.Component
+{
+	constructor(props)
 	{
-		console.log(this.props.params);
-		var group = new GroupModel({group_id: this.props.params.group_id});
+		super(props);
+
+		console.log(this.props.match.params);
+		var group = new GroupModel({group_id: this.props.match.params.group_id});
 		group.fetch();
 
-		return {
+		this.state = {
 			model: group,
 		};
-	},
+	}
 
-	render: function()
+	render()
 	{
 		return (
 			<div>
@@ -26,6 +29,6 @@ module.exports = withRouter(React.createClass({
 				<Group model={this.state.model} route={this.props.route} />
 			</div>
 		);
-	},
-}));
-//GroupEditHandler.title = "Visa grupp";
+	}
+});
+//GroupEditHandler.title = "Redigera grupp";

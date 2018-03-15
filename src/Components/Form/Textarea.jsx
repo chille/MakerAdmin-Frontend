@@ -1,7 +1,7 @@
 import React from 'react'
 import classNames from 'classnames/bind'
 
-module.exports = class FormInput extends React.Component
+module.exports = class FormInputTextarea extends React.Component
 {
 	constructor(props)
 	{
@@ -99,7 +99,7 @@ module.exports = class FormInput extends React.Component
 			<div className={classes}>
 				<label htmlFor={this.props.name} className="uk-form-label">{this.props.title}</label>
 				<div className="uk-form-controls">
-					<textarea ref="textarea" type="text" rows="1" name={this.props.name} id={this.props.name} disabled={this.props.disabled} value={this.state.value} placeholder={this.props.placeholder ? this.props.placeholder : this.props.title} onChange={this.onChange.bind(this)} className="uk-form-width-large" onFocus={this.onFocus.bind(this)} onBlur={this.onBlur.bind(this)} />
+					<textarea ref="textarea" type="text" rows="1" name={this.props.name} id={this.props.name} disabled={this.props.disabled} value={this.state.value} placeholder={this.props.placeholder || this.props.title} onChange={this.onChange.bind(this)} className="uk-form-width-large" onFocus={this.onFocus.bind(this)} onBlur={this.onBlur.bind(this)} />
 					{this.state.error_column == this.props.name ?
 						<p className="uk-form-help-block error">{this.state.error_message}</p>
 					: ""}
