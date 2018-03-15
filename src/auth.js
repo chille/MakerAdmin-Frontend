@@ -1,4 +1,4 @@
-import { browserHistory } from 'react-router'
+//import { browserHistory } from 'react-router-dom'
 
 module.exports =
 {
@@ -103,7 +103,6 @@ module.exports =
 		// Delete from localStorage and send user to login form
 		delete localStorage.token
 		this.onChange(false);
-		browserHistory.push("/");
 	},
 
 	/**
